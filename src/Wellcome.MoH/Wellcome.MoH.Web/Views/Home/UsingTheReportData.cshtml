@@ -1,0 +1,177 @@
+@model dynamic
+@{
+    ViewData["Title"] = "Using the report data";
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "Using the report data";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+<section>
+    <div class="section">
+        <div class="wrap">
+
+            <ul id="lvlyul" class="breadcrumb" role="navigation">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about-the-reports/">About the reports</a></li>
+                <li>Using the report data</li>
+            </ul>
+
+            <div class="group fixed-left">
+                <div class="fixed-column">
+                    <ul class="section-nav" role="navigation">
+                        <li>
+                            <a href="/about-the-reports/">About the reports</a>
+                            <ul>
+                                <li>
+                                    <a href="/about-the-reports/about-the-medical-officer-of-health-reports/">The Medical Officer of Health reports</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/the-health-of-the-people/">The health of the people</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/new-kind-of-medical-professional/">A new kind of medical professional</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/the-changing-face-of-london/">The changing face of London</a>
+                                </li>
+                                <li>
+                                    <a class="current" href="/about-the-reports/using-the-report-data/">Using the report data</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/timeline/">Health of London timeline</a>
+                        </li>
+                    </ul>
+
+                </div><!-- /.fixed-column -->
+                <div class="fluid-column track-link">
+                    <p class="leading">
+                        The London Medical Officer of Health (MOH) reports have been photographed cover-to-cover and 
+                        turned into text using Optical Character Recognition (OCR). This page provides information about 
+                        using the data in your research.
+                    </p>
+                    <div id="contGroup" class="group fixed-right">
+                        <div class="fluid-column">
+
+                            <h4 class="separator">Scope</h4>
+                            <p>
+                                This website brings together around 5800 Medical Officer of Health (MOH) reports from 
+                                the Greater London area. This includes the present-day City of London, 32 London 
+                                boroughs and the predecessor local authorities for these boroughs, including urban and 
+                                rural district councils and sanitary districts.
+                            </p>
+                            <p>
+                                We have made every effort to digitise all of the London MOH reports from the Wellcome 
+                                Library’s collections, though some gaps inevitably remain, either because the report is 
+                                missing or was never produced at the time. We are grateful to 
+                                <a title="London Metropolitan Archives" 
+                                   href="http://www.cityoflondon.gov.uk/things-to-do/visiting-the-city/archives-and-city-history/london-metropolitan-archives/Pages/default.aspx">London Metropolitan Archives</a> 
+                                who contributed nearly 600 reports to fill the gaps in the Wellcome Library’s holdings.&nbsp;
+                            </p>
+                            <p>
+                                The reports have been photographed cover-to-cover and turned into text using Optical 
+                                Character Recognition (OCR). Although the OCR has been done to a high degree of accuracy, 
+                                errors may exist, particularly where text in the original document is faint, blurry, or 
+                                lost in the gutter of a tight binding.
+                            </p>
+                            <p>
+                                Along with the full text, around 275 000 tables have been extracted from the reports as 
+                                individual files (downloadable as text, HTML, XML and CSV). A small number of tables 
+                                (approximately 2%)&nbsp;could not be&nbsp;extracted in this way because either the 
+                                data&nbsp;occurred within the narrative text, without a tabular format, or the 
+                                table&nbsp;lacked a clear description, heading or caption. The extracted tables have 
+                                undergone extensive quality assurance checks, but due to the volume of the data, we 
+                                cannot promise 100% accuracy. Where there is any doubt about the accuracy of the data, 
+                                the extracted tables can be directly compared to their corresponding page images on the 
+                                website.
+                            </p>
+                            <h4 class="separator">
+                                <a id="downloads">Download&nbsp;options</a>
+                            </h4>
+                            <p>
+                                The London MOH data is free to download and reuse under a 
+                                Creative Commons license&nbsp;(<a title="Creative Commons Attribution 4.0 International" 
+                                                                  href="http://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>). 
+                                You can download the data for specific boroughs and time periods, as well as data for 
+                                individual reports, by using the&nbsp;browse and search&nbsp;functions on the website.
+                            </p>
+                            <h5>
+                                Downloading 100+ reports
+                            </h5>
+                            <p>
+                                When your search results in 100 reports or more, or you need the full corpus for 
+                                text-mining and data analysis, we recommend using the download options below. All 
+                                tables and the full text are available as .ZIP files.
+                            </p>
+                            <p>
+                                <a title="Full Text.zip" class="action" 
+                                   href="https://s3-eu-west-1.amazonaws.com/moh-reports/zips/Fulltext.zip">Full text corpus</a> 
+                                (raw text) [215 MB]<br/>
+                                <a title="All Report Tables CSV.zip" class="action" 
+                                   href="https://s3-eu-west-1.amazonaws.com/moh-reports/zips/All_Report_Tables.csv.zip">All report tables as CSV</a> 
+                                [340 MB] <br/>
+                                <a title="All Report Tables HTML.zip" class="action" 
+                                   href="https://s3-eu-west-1.amazonaws.com/moh-reports/zips/All_Report_Tables.html.zip">All report tables as HTML</a> 
+                                [412 MB]<br/>
+                                <a title="All Report Tables XML.zip" class="action" 
+                                   href="https://s3-eu-west-1.amazonaws.com/moh-reports/zips/All_Report_Tables.xml.zip">All report tables as XML</a> 
+                                [536 MB]<br/>
+                                <a title="All Report Tables TXT.zip" class="action" 
+                                   href="https://s3-eu-west-1.amazonaws.com/moh-reports/zips/All_Report_Tables.txt.zip">All report tables as TXT</a> 
+                                [422 MB]<br/>
+                            </p>
+                            <p>
+                                We will continue to add data over time as we fill gaps in&nbsp;our holdings or 
+                                include&nbsp;additional digitised MOH reports.
+                            </p>
+                            <h4 class="separator">
+                                Your feedback
+                            </h4>
+                            <ul>
+                                <li>Are you using the MOH reports for your research?</li><li>Have you used the MOH data 
+                                    to build a website or app?</li><li>Do you have any data visualisation or mapping 
+                                    projects on the go? </li>
+                            </ul>
+                            <p>
+                                Let us know! We are keen to share examples of creative, innovative and academic work 
+                                with the research community.
+                            </p>
+                            <p>
+                                We’d also love to know about your experience using the London Medical Officer of Health 
+                                reports online. Any feedback you contribute will help us&nbsp;to improve the website, 
+                                making London’s Pulse a more valuable research resource for all.
+                            </p>
+                            <p>
+                                <strong>Please get in touch: <br/>Email</strong>: 
+                                <a title="Library Web Editorial team address" href="#">LibraryWebEditorial@wellcome.ac.uk</a>
+                                <br/><strong>Twitter</strong>: @@WellcomeLibrary /&nbsp;#mohreports / #londonspulse
+                            </p>
+
+
+                        </div><!-- /.fluid-column -->
+                        <div id="rhsCol" class="fixed-column">
+
+
+                            <h4 class="separator">Follow the timeline</h4>
+                            <a class="promo blue img" href="/timeline/">
+                                <div class="contents">
+
+                                    <h4>Key events relating to the health of London in the 19th and 20th centuries</h4>
+                                    <p class="meta"></p>
+                                </div>
+                                <img src="/assets/img/24524.jpg" 
+                                     alt="Key events relating to the health of London in the 19th and 20th centuries"/>
+                            </a><!-- /.promo.xxx -->
+
+
+                        </div><!-- /.fixed-column -->
+                    </div><!-- /.group.fixed-right -->
+
+
+                    <!-- wl:SocialLinks was here -->
+                </div><!-- /.fluid-column -->
+            </div><!-- /.group.fixed-left -->
+        </div><!-- /.wrap -->
+    </div><!-- /.section -->
+</section>

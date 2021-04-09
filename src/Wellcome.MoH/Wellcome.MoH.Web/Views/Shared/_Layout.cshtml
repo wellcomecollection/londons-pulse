@@ -1,0 +1,267 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-placeholder-focus="false">
+<head>
+    <meta charset="utf-8"/>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="/assets/css/select2.css"/>
+    <link rel="stylesheet" href="/assets/css/cookie.css"/>
+    <link rel="stylesheet" href="/assets/css/core.css"/>
+    <link rel="stylesheet" media="all and (min-width: 50em)" href="/assets/css/layout.css"/>
+    <!--[if (lt IE 9)&(!IEMobile)]>
+        <link rel="stylesheet" media="screen" href="/assets/css/layout.css" />
+    <![endif]-->
+    <!--[if (lte IE 7)]>
+        <link rel="stylesheet" href="/assets/css/ie7.css" />
+    <![endif]-->
+    <link rel="stylesheet" media="print" class="contrast-css" href="/assets/css/print.css"/>
+    <script>
+        document.getElementsByTagName('html')[0].className += ' has-js';
+    </script>
+    <script src="https://cdn.optimizely.com/js/699750911.js"></script>
+    <link rel="shortcut icon" href="/assets/img/favicon.png"/>
+    <link rel="apple-touch-icon" href="/assets/img/touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/assets/img/touch-icon-72.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/assets/img/touch-icon-114.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
+    <meta name="DC.Identifier" content="wellcomelibrary.org/moh/about-the-reports/" scheme="URI"/>
+    <meta name="DC.Title" content="@ViewData["Title"]" lang="en"/>
+    <meta name="DC.Date.created" content="2013-10-26" scheme="W3CDTF"/>
+    <meta name="DC.Description" content="@ViewData["Description"]" lang="en"/>
+    <meta name="Description" content="@ViewData["Description"]" lang="en"/>
+    <meta name="robots" content="index,follow"/>
+    <meta name="Keywords" content="MOH, mooh, medical officer health, london health, reports, health reports, digitised, digitized, medical, social, history, daily life, victorian london, sanitisation, sanitization, sanitation, public health, mortality rates, birth rates"/>
+    <meta name="DC.Date.updated" content="2013-10-26" scheme="W3CDTF"/>
+</head>
+<body data-library>
+<!-- Google Tag Manager -->
+<noscript>
+    <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WV9JS8W" height="0" width="0" style="display: none; visibility: hidden"></iframe>
+</noscript>
+<script>
+    (function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; 
+        j.async = true; j.src ='https://www.googletagmanager.com/gtm.js?id='+i+dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-WV9JS8W');
+</script>
+<!-- End Google Tag Manager -->
+<div class="page-wrap">
+
+
+    <header>
+        <div class="section header" role="banner">
+
+            @* <div id="cookieconsent"> *@
+            @*     <div id="cookierow"> *@
+            @*         <div class="wrap"> *@
+            @*             <div id="cookietext">Wellcome uses cookies. <a href="http://www.wellcome.ac.uk/About-this-site/cookies/index.htm">Read our policy</a>.</div> *@
+            @*             <div id="cookieaccept"><a href="#" id="accept">Continue</a></div> *@
+            @*         </div> *@
+            @*     </div>      *@
+            @* </div> *@
+
+            <div class="wrap">
+
+                <ul class="top-nav" role="navigation">
+                    <li id="contactUsLink">
+                        <a href="/using-the-library/services-and-facilities/contact-us/">Contact us</a>
+                    </li>
+                </ul>
+                <div class="site-title reduced">
+                    <a href="/">
+                        <img id="wlReducedLogo" src="/assets/img/wellcome-logo.png" alt="wellcome library">
+                    </a>
+                </div><!-- /.site-title -->
+            </div><!-- /.wrap -->
+        </div><!-- /.section.header -->
+    </header>
+
+
+    <form method="post" action="./" id="aspnetForm" class="library-site">
+
+        @if (ViewData["HideNav"] == null)
+        {
+            <section>
+                <div class="section header">
+                    <div class="grid-pattern page-heading subject-heading">
+                        <div class="wrap">
+
+                            <div class="">
+                                <!-- /.fixed-column -->
+                                <div class="group fluid-full" style="background-image: url(/assets/img/moh-heading.png)">
+                                    <div class="page-title no-artifact">
+                                        @if (ViewData["h2"] != null)
+                                        {
+                                            <h2>@ViewData["h2"]</h2>
+                                        }
+                                        <h1>@ViewData["h1"]</h1>
+                                    </div>
+                                    <div class="artifact">
+                                        <p class="information">
+                                            <a href="https://wellcomecollection.org/works/k7wrmubv/items?canvas=266">
+                                                Hints from the Health Department. Leaflet from the archive of the Society of Medical Officers of Health.
+                                            </a>
+                                            Credit: Wellcome Collection, London
+                                        </p>
+                                    </div><!-- /.artifact -->
+                                </div><!-- /.fluid-column -->
+                            </div><!-- /.group.fixed-left -->
+                        </div><!-- /.wrap -->
+                    </div><!-- /.grid-pattern.page-title -->
+                    <div class="wrap">
+
+                        <ul class="main-nav" role="navigation">
+                            <li>
+                                <navlink href="/">Home</navlink>
+                            </li>
+                            <li>
+                                <navlink href="/search/">Search The Reports</navlink>
+                            </li>
+                            <li>
+                                <navlink href="/about-the-reports/">About The Reports</navlink>
+                            </li>
+                            <li>
+                                <navlink href="/timeline/">Health of London Timeline</navlink>
+                            </li>
+                        </ul>
+
+
+                    </div><!-- /.wrap-->
+                </div><!-- /.section.header -->
+            </section>
+        }
+
+        @RenderBody()
+
+        <footer>
+            <div class="section footer">
+                <div class="wrap">
+                    <ul class="sitemap group third" role="navigation">
+                        <li class="column">
+                            <h6 id="hFooterGroup1">Searching the collections</h6>
+                            <ul>
+                                <li>
+                                    <a class="action" href='/using-the-library/how-to/which-search-tool/'>Which search tool should I use?</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/search-the-catalogues/'>Search the catalogues</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/using-the-library/how-to/databases-a-z/'>Databases A-Z</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/using-the-library/how-to/request-and-delivery/'>Request and delivery</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/collections/about-the-collections/'>About the collections</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="column">
+                            <h6 id="hFooterGroup2">Visiting Us</h6>
+                            <ul>
+                                <li>
+                                    <a class="action" href='/using-the-library/joining-the-library/'>Joining the Library</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/using-the-library/visiting-the-library/how-to-find-us/'>How to find us</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/using-the-library/services-and-facilities/'>Services and facilities</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/using-the-library/visiting-the-library/access-for-visitors-with-disabilities/'>Access for visitors with disabilities</a>
+                                </li>
+                                <li>
+                                    <a class="action" href='/using-the-library/visiting-the-library/opening-hours/'>Opening hours</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="column">
+                            <h6 id="hFooterGroup3">Community</h6>
+                            <ul>
+                                <li>
+                                    <a href="http://twitter.com/wellcomelibrary" class="twitter-link" rel="me">Twitter: @@WellcomeLibrary </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.facebook.com/wellcomecollection/" class="facebook-link" rel="me">Wellcome Collection on Facebook</a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    </ul><!-- /.sitemap.group.third -->
+                    <div class="group third">
+                        <div class="column two-thirds">
+                            <ul class="footer-nav" role="navigation">
+                                <li>
+                                    <a href='/using-the-library/services-and-facilities/contact-us/'>Contact us</a>
+                                </li>
+                                <li>
+                                    <a href='/what-we-do/'>What we do</a>
+                                </li>
+                                <li>
+                                    <a href='/about-this-site/'>About this site</a>
+                                </li>
+                                <li>
+                                    <a href='https://wellcome.ac.uk/about-us/privacy-and-terms'>Privacy and terms</a>
+                                </li>
+                                <li>
+                                    <a href='/cookies/'>Cookies</a>
+                                </li>
+                                <li>
+                                    <a href='/sitemap/'>Site map</a>
+                                </li>
+                            </ul><!-- /.footer-nav -->
+                            <p>
+                                <small>
+                                    Except where otherwise noted, content on this site is licensed under a
+                                    <a title="Creative Commons Attribution 4.0 International license" href="http://creativecommons.org/licenses/by/4.0/">
+                                        Creative Commons Attribution 4.0 International licence.
+                                    </a><br/>
+                                    Page last updated:
+                                    <span id="lblUpdated">24 February 2021</span>
+                                    &copy; Wellcome Trust 2021
+                                    <!-- [<strong> <span id="lblBuild">BUILD: 0.115.0.0 (6d6e0909234e8004457aa8e11d6fb5743ed93b5d)</span> </strong>] -->
+                                </small>
+                            </p>
+                        </div><!-- /.column.two-thirds -->
+                        <div class="column text-right wellcome-trust">
+                            <p>
+                                <small>The Wellcome Library is part of the <strong>Wellcome Trust</strong></small>
+                            </p>
+                            <a href="http://www.wellcome.ac.uk/" title="Visit the Wellcome Trust">
+                                <img src="/assets/img/wellcome-trust-logo.png" alt="Wellcome Trust">
+                            </a>
+                        </div><!-- /.column -->
+                    </div><!-- /.group.third -->
+                </div><!-- /.wrap -->
+            </div><!-- /.section.footer -->
+
+        </footer>
+    </form>
+</div><!-- /.page-wrap -->
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+    if (!window.jQuery) {
+        document.write(unescape("%3Cscript src='%2FScripts%2Fjquery-1.7.2.min.js'%3E%3C/script%3E"));
+    }
+</script>
+
+<script type="text/javascript" src="/assets/js/SiteMergedScript.js"></script>
+<script type="text/javascript" src="/assets/js/moh.js"></script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-5739409-1', 'auto');
+// Optimizely Universal Analytics Integration Code
+window.optimizely = window.optimizely || [];
+window.optimizely.push('activateUniversalAnalytics');
+// End Optimizely Code
+ga('send', 'pageview');
+</script>
+
+</html>

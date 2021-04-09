@@ -1,0 +1,82 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="/plugins/timeline/css/styles.css"/>
+    <link rel="stylesheet" type="text/css" href="/plugins/timeline/css/wellcomeTheme.css"/>
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" type="text/css" href="/plugins/timeline/css/ie.css" />
+    <![endif]-->
+</head>
+<body>
+<div id="timeline"></div>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/plugins/timeline/TimelineMergedScript.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+
+        // set initial height of container
+        $('#timeline').css({
+            height: $(window).height()
+        });
+
+        var isHomeDomain = getParameterByName('isHomeDomain') || false;
+        var isOnlyInstance = getParameterByName('isOnlyInstance') || false;
+        var embedScriptUri = getParameterByName('embedScriptUri');
+        var dataUri = getParameterByName('dataUri');
+        var eventId = getParameterByName('eventId');
+        var url = getParameterByName('url');
+
+        var createTimeline = function () {
+
+            $('#timeline').wellcomeTimeline(
+        {
+            configUri: '/plugins/timeline/config.js',
+            dataUri: dataUri,
+            eventId: eventId,
+            embedScriptUri: embedScriptUri,
+            isHomeDomain: isHomeDomain,
+            isOnlyInstance: isOnlyInstance,
+            url: url,
+            provider: new WellcomeTimelineProvider()
+        });
+        };
+
+        createTimeline();
+    });
+
+    // Google Analytics
+    function trackEvent(category, action, label, value) {
+        //console.log('event: ', category, action, label, value);
+        ga('send', 'event', category, action, label, value);
+        //_gaq.push(['_trackEvent', category, action, label, Number(value)]);
+    }
+
+    function trackVariable(slot, name, value, scope) {
+        //console.log('variable: ', slot, name, value, scope);
+        ga('set', name, value);
+        //_gaq.push(['_setCustomVar', Number(slot), name, value, Number(scope)]);
+    }
+
+</script>
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-5739409-1', 'auto');
+// Optimizely Universal Analytics Integration Code
+window.optimizely = window.optimizely || [];
+window.optimizely.push('activateUniversalAnalytics');
+// End Optimizely Code
+ga('send', 'pageview');
+</script>
+
+</body>
+</html>

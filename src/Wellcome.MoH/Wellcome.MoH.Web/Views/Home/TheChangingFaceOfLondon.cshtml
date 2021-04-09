@@ -1,0 +1,220 @@
+@model dynamic
+@{
+    ViewData["Title"] = "A new kind of medical professional";
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "A new kind of medical professional";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+
+<section>
+    <div class="section">
+        <div class="wrap">
+
+            <ul id="lvlyul" class="breadcrumb" role="navigation">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about-the-reports/">About the reports</a></li>
+                <li>The changing face of London</li>
+            </ul>
+
+
+            <div class="group fixed-left">
+                <div class="fixed-column">
+                    <ul class="section-nav" role="navigation">
+                        <li>
+                            <a href="/about-the-reports/">About the reports</a>
+                            <ul>
+                                <li>
+                                    <a href="/about-the-reports/about-the-medical-officer-of-health-reports/">The Medical Officer of Health reports</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/the-health-of-the-people/">The health of the people</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/new-kind-of-medical-professional/">A new kind of medical professional</a>
+                                </li>
+                                <li>
+                                    <a class="current" href="/about-the-reports/the-changing-face-of-london/">The changing face of London</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/using-the-report-data/">Using the report data</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/timeline/">Health of London timeline</a>
+                        </li>
+                    </ul>
+
+                </div><!-- /.fixed-column -->
+                <div class="fluid-column track-link">
+                    <p class="leading">
+                        Many of the daily concerns and shifting preoccupations of Londoners can be seen through the 
+                        eyes of their Medical Officers of Health.
+                    </p>
+                    <div id="contGroup" class="group fixed-right">
+                        <div class="fluid-column">
+                            
+                            <div class="figure">
+                                <figure>
+                                    <img src="/assets/img/blue-map-560-x-290.jpg" alt="Map of London"/>
+                                    <figcaption>
+                                        <div class="caption">
+                                            <p>
+                                                <a title="Camberwell, 1905" href="/report/b18044554/6">Map showing the 
+                                                    death rates in&nbsp;the Metropolitan Boroughs.&nbsp;MOH report 
+                                                    for&nbsp;Camberwell, 1905</a>.
+                                            </p>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <p>
+                                Over the decades, and often imperceptibly, every home, street and workplace was shaped 
+                                by the work of Medical Officers of Health (MOHs). In their reports we find unexpected 
+                                angles on histories as diverse as work and empire. 
+                                <a title="1890: Port of London authority" href="/timeline/#35146">Port reports</a> of 
+                                attempts to track and contain plague outbreaks reconstruct the movements of ships and 
+                                their cargoes across the globe, and in doing so they vividly convey London's position 
+                                at the centre of a world trading system.
+                            </p>
+                            <p>
+                                It is in discussions of bylaws on the disposal of dead horse carcasses or on the 
+                                creation of manure and refuse sites that we can track the gradual cleaning of the 
+                                streets; and it is in the testing and removal of contaminated milk by sanitary 
+                                inspectors as much as in the growth of sanatoria and vaccination that we can understand 
+                                the decline of tuberculosis.
+                            </p>
+                            <p>
+                                In the 1860s around a third of all deaths were from infectious disease; this had 
+                                declined to a quarter by 1911, and to under 4% by 1951.
+                            </p>
+                            <p>
+                                While the Corporation of the City of London remained largely independent in its working, 
+                                the rest of the metropolis was organised by parishes run by their vestries. In 1855 
+                                these were brought under the overview of the 
+                                <a title="Metropolitan Board of Works" href="/timeline/#35073">Metropolitan Board of Works</a>, 
+                                the nearest thing the capital had to an overseeing body until it was superseded by the 
+                                <a title="1888: creation of the London County Council" href="/timeline/#35137">London County Council</a> 
+                                in 1888. In 1900 the vestries ceded their powers to larger metropolitan boroughs. Before 
+                                World War II, painstaking enumerations of children inadequately clothed and shod, 
+                                <a title="Bethnal Green Personal Cleansing Station" href="/report/b18236674/77">infested with head lice</a>, 
+                                scabies and impetigo, and suffering from uncorrected squints or physical disabilities 
+                                reveal how poverty was inscribed on the bodies of London's poorest. Over time, open 
+                                sewers, contaminated water, damp bedrooms infested with bugs, tuberculosis-infected 
+                                milk and high infant mortality rates became less common, largely disappearing by the 
+                                1970s.
+                            </p>
+                            <p>
+                                If the reports chart the decline of some issues, they also track the rise of others – 
+                                heart diseases and cancer gained relentless prominence from the interwar period. After 
+                                1945, the expanded place of social services in the lives of Londoners is reflected in 
+                                the number of committees and services dealing with "juvenile delinquents", "maladjusted 
+                                children", "problem families" and indeed "potential problem families".
+                            </p>
+
+                            <div class="figure float-left">
+                                <figure>
+                                    <img src="/assets/img/L0025727.jpg" alt="Cover of a leaflet showing a mother and infant"/>
+                                    <figcaption>
+                                        <div class="caption">
+                                            <p>
+                                                Health care leaflets: What is a Health Visitor? 
+                                                <a title="L0025727: Health Visitors' Association" 
+                                                   href="http://wellcomeimages.org/indexplus/image/L0025727.html">Credit: Wellcome Images no. L0025727</a>
+                                            </p>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <p>
+                                Often the lives of London's women are revealed in the MOH reports in the starkest terms: 
+                                maternal mortality rates, which remained stubbornly high into the 1930s, were perhaps 
+                                the most visible indicator. But, by looking for example at numbers of people per room, 
+                                infant mortality rates, deaths from infectious disease, and the percentage of women with 
+                                profound dental decay or children with rickets, it is not hard to gain an insight into 
+                                how poor nutrition, scarce resources and slum housing shaped millions of women's 
+                                everyday existence.
+                            </p>
+                            <p style="font-size: 100%">
+                                We also see the changing lives of women in the different ways in which they appear as 
+                                medical professionals in MOH reports. At first completely absent, they have their 
+                                <a title="1855-6 MOH Report City of London" href="/report/b18197292/22">first mention 
+                                    as nurses in 1856</a> - though not yet as part of the public health profession, but 
+                                rather lumped in with domestic servants in a consideration of different occupational 
+                                death rates. Gradually, however, they slip into the pages, as nurses, handywomen and 
+                                midwives, then medical assistants, and finally Assistant MOHs and even full MOHs. We 
+                                also see the creation of the roles of health visitor, school nurse and social worker - 
+                                professions dominated by women.
+                            </p>
+                            <p>
+                                If MOH reports are able to give unique insights into the changes and developments in 
+                                London life and that of the nation, they are no less equipped to reveal the continuities. 
+                                Infant and maternal mortality rates may have decreased, yet the depressing fact revealed 
+                                in MOH reports is that poor Londoners continued to be far unhealthier, live in 
+                                unsatisfactory or overcrowded housing and be more vulnerable to occupational illnesses 
+                                than the rich. Slum housing and health inequalities across the capital in the early 
+                                1970s were still a stark reminder that there was much work left to be done. That they 
+                                had narrowed so much was in no small part due to the relentless work of the Medical 
+                                Officers of Health.
+                            </p>
+                            <h4 class="separator">
+                                Find Out More
+                            </h4>
+                            <ul>
+                                <li>The Wellcome Library has lots of information about London in its archive collections 
+                                    – see our <a title="Local history subject guides" href="http://wellcomelibrary.org/using-the-library/subject-guides/">Local 
+                                        History subject guides</a> for details.</li>
+                                <li>The <a title="Charles Booth online archive" href="http://booth.lse.ac.uk/" target="_blank">Charles Booth Online Archive</a> 
+                                    contains the original records from Booth's survey into life and labour in London, 
+                                    dating from 1886 to 1903, including maps!&nbsp;</li>
+                                <li><a title="London Metropolitan Archives" href="http://www.cityoflondon.gov.uk/things-to-do/visiting-the-city/archives-and-city-history/london-metropolitan-archives/the-collections/Pages/default.aspx" target="_blank">London Metropolitan Archives</a> 
+                                    (LMA) holds a diverse collection of archives, records, images, films and maps that 
+                                    can help researchers in all aspects of London's history.</li>
+                                <li>Most of the current London boroughs have public archives services. See the ARCHON 
+                                    directory list of <a title="repositories in London" href="http://www.nationalarchives.gov.uk/archon/searches/locresult.asp?lrgn=London" target="_blank">repositories in London</a> 
+                                    for details.&nbsp;</li><li>Porter, R. London: a social history. London: Hamish 
+                                    Hamilton; 1994. <a title="Catalogue record: London: a social history" href="http://search.wellcomelibrary.org/iii/encore/record/C__Rb1154417?lang=eng">Available in the Wellcome Library</a>.
+                                    </li>
+                            </ul>
+
+
+                        </div><!-- /.fluid-column -->
+                        <div id="rhsCol" class="fixed-column">
+
+                            <h4 class="separator">Report highlight</h4>
+                            <a class="promo black img" href="/report/b18218842/53">
+                                <div class="contents">
+
+                                    <h4>War conditions</h4>
+                                    <p class="meta">in the report for Bermondsey 1944</p>
+                                </div>
+                                <img src="/assets/img/37594.jpg" alt="War conditions"/>
+                            </a><!-- /.promo.xxx -->
+
+
+                            <h4 class="separator">In The Timeline</h4>
+                            <a href="/timeline/#35184" class="promo blue img closer">
+                                <div class="contents">
+                                    <h4><strong>1918:</strong> Maternity and Child Welfare Act </h4>
+                                </div>
+                                <img src="/assets/timelines/moh/37881.jpg" width="240" alt="Maternity and Child Welfare Act "/>
+                            </a><!-- /.promo.blue.img.closer -->
+
+                            <p>
+                                <a href="/timeline/#35184" class="action muted">Open the timeline</a>
+                            </p>
+
+
+                        </div><!-- /.fixed-column -->
+                    </div><!-- /.group.fixed-right -->
+
+
+                    <!-- wl:SocialLinks was here -->
+                </div><!-- /.fluid-column -->
+            </div><!-- /.group.fixed-left -->
+        </div><!-- /.wrap -->
+    </div><!-- /.section -->
+</section>

@@ -1,0 +1,8 @@
+﻿.action,
+a.action.black,
+input.action {
+    display: inline-block;
+    background: url(../../../assets/css/sprite.png) 0 -1000px no-repeat;
+    text-transform: none;
+    padding: 0 0 0 16px;
+}

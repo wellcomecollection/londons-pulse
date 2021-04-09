@@ -1,0 +1,210 @@
+@model dynamic
+@{
+    ViewData["Title"] = "The Medical Officer of Health reports";
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "The Medical Officer of Health reports";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+
+<section>
+    <div class="section">
+        <div class="wrap">
+
+            <ul id="lvlyul" class="breadcrumb" role="navigation">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about-the-reports/">About the reports</a></li>
+                <li>The Medical Officer of Health reports</li>
+            </ul>
+
+
+            <div class="group fixed-left">
+                <div class="fixed-column">
+                    <ul class="section-nav" role="navigation">
+                        <li>
+                            <a href="/about-the-reports/">About the reports</a>
+                            <ul>
+                                <li>
+                                    <a class="current" href="/about-the-reports/about-the-medical-officer-of-health-reports/">The Medical Officer of Health reports</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/the-health-of-the-people/">The health of the people</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/new-kind-of-medical-professional/">A new kind of medical professional</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/the-changing-face-of-london/">The changing face of London</a>
+                                </li>
+                                <li>
+                                    <a href="/about-the-reports/using-the-report-data/">Using the report data</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="/timeline/">Health of London timeline</a>
+                        </li>
+                    </ul>
+
+                </div><!-- /.fixed-column -->
+                <div class="fluid-column track-link">
+                    <p class="leading">
+                        The reports provided statistical data about births, deaths and diseases, but they also allowed the
+                        authors to express the diversity of their local communities and their own personal interests.
+                    </p>
+                    <div id="contGroup" class="group fixed-right">
+                        <div class="fluid-column">
+
+
+                            <div class="figure">
+                                <figure>
+                                    <img src="/assets/img/graph-fw.jpg" alt="Graph showing occurrences of scarlet fever, typhoid and diptheria."/>
+                                    <figcaption>
+                                        <div class="caption">
+
+                                            <p>
+                                                <a title="Limehouse district, 1900" href="/report/b18223114/7">
+                                                    Curve showing the number of cases notified
+                                                    week by week of scarlet fever, diphtheria, and typhoid fever,
+                                                    during 1899.&nbsp;MOH report for&nbsp;Limehouse District, 1900
+                                                </a>.
+                                            </p>
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            </div>
+
+                            <p>
+                                The reports were produced each year by the Medical Officer of Health (MOH)
+                                of a district and set out the work done by his public health and sanitary officers.
+                                The reports provided vital data on birth and death rates, infant mortality, incidence
+                                of infectious and other diseases, and a general statement on the health of the
+                                population. As the work of public health departments expanded, so too did the reports:
+                                by the 1930s we are given details on such matters as:
+                            </p>
+                            <ul>
+                                <li>numbers visiting maternity and child welfare clinics</li>
+                                <li>pints of free milk dispensed</li>
+                                <li>statistics for use of venereal disease clinics</li>
+                                <li>numbers of tubercular children attending open-air schools</li>
+                                <li>Poor Law infirmaries and municipal hospitals.</li>
+                            </ul>
+                            <p>
+                                While over time the data that was to be included in annual reports was standardised, 
+                                there was still a large degree of leeway. Consequently the reports show diversity 
+                                both between different areas at the same time, and for the same place at different 
+                                times. On top of this, even standard statistics - such as maternal mortality rates - 
+                                might be presented in various forms by different MOHs, meaning that direct comparisons 
+                                can be difficult. Furthermore, the permissive nature of the legislation meant that 
+                                reports varied greatly in length: while interwar 
+                                <a title="Report for Poplar, 1925" href="/report/b18245973/">Poplar</a>'s commonly ran 
+                                to over 120 pages, those of wealthy 
+                                <a title="Report for Richmond upon Thames, 1939" href="/report/b19879799/">Richmond</a> 
+                                were less than a third that.
+                            </p>
+                            <p>
+                                In 1888 the 
+                                <a title="1888: creation of the London County Council" href="/timeline/#35137">London 
+                                    County Council (LCC) was created</a>. It rapidly came to see itself as the exemplar 
+                                in British local government.
+                            </p>
+                            <p>
+                                One result of this, for historians, is not just that its annual reports offer a rich 
+                                insight into everyday life in the capital, but that its aggregation of data for all 
+                                London's authorities allows some sense of comparative performance across the city. 
+                                In addition, we have the legacy of annual Local Government Board reports and, from 1919, 
+                                Ministry of Health reports giving the national picture for England and&nbsp; Wales - as 
+                                well as the statistics compiled by the Registrar General. Therefore someone interested 
+                                in knowing how Stepney's or Hammersmith's health or services looked can set the relevant 
+                                MOH reports alongside the LCC report for the same year, or indeed that of the Ministry 
+                                of Health.
+                            </p>
+                            <p>
+                                Despite attempts at standardisation, the reports nevertheless are revealing of each 
+                                MOH's particular strengths, interests or even idiosyncrasies. So, Mile End's first MOH, 
+                                Dr Freeman, spent some time in his final report (1865) not only discussing the emergence 
+                                of a new wave of <a title="Report for Mile End, 1865" href="/report/b18039595/2">cholera 
+                                    in Egypt</a> but also using this as a springboard to argue for the importance of 
+                                reducing poverty, poor housing and inadequate diets in preventing epidemics. His 
+                                successor, <a title="Report for Mile End 1867" href="/report/b18039601/32">Dr Corner, 
+                                    produced very different reports</a>: their bulk was taken up with listing the 
+                                considerable numbers of vestry members and setting out the accounts for the year; he 
+                                left any detailed consideration to his Surveyor, who provided a wealth of detail on 
+                                street paving, the costs of hiring horses for scavenging and the effects of removing the 
+                                toll on Mile End Road. Clearly, then, the personality of the individual MOH could be a 
+                                significant factor in the health of a district.
+                            </p>
+                            <h4 class="separator">
+                                Find out more
+                            </h4>
+                            <ul>
+                                <li>The Library holds printed MOH reports from across the rest of the United Kingdom. 
+                                    <a title="Search the Library catalogue" 
+                                       href="https://wellcomecollection.org/collections">Search the Library catalogue</a> 
+                                    for ‘medical officer of health’ and the town or borough e.g. 
+                                    ‘medical officer of health birmingham’.
+                                    </li>
+                                <li>The 
+                                    <a title="Public health subject guide" 
+                                       href="http://wellcomelibrary.org/collections/archive-guides/public-health/">Public 
+                                        Health subject guide</a> to archives in the Wellcome Library lists many sources, 
+                                    including the papers of the Society of Medical Officers of Health and the personal 
+                                    papers of some individual medical officers.&nbsp;</li>
+                                <li>Harris, B. The origins of the British welfare state: society, state and social 
+                                    welfare in England and Wales, 1800-1945. Basingstoke: Palgrave Macmillan; 2004. 
+                                    <a title="Catalogue record: The origins of the British welfare state: society, state and social welfare in England and Wales, 1800-1945" 
+                                       href="https://wellcomecollection.org/works/s94nx58c">Available in the Wellcome Library</a>.
+                                </li>
+                                <li>Hardy, A. The epidemic streets: infectious disease and the rise of preventive 
+                                    medicine, 1856-1900. Oxford: Clarendon Press; 1993. 
+                                    <a title="Catalogue record: The epidemic streets: infectious disease and the rise of preventive medicine, 1856-1900" 
+                                       href="https://wellcomecollection.org/works/v6fnc2rt">Available in the Wellcome Library</a>.
+                                </li>
+                                <li>Porter, D. Health, Civilization and the State: A History of Public Health from 
+                                    Ancient to Modern Times. London: Routledge; 1999. 
+                                    <a title="Catalogue record: Health, civilization, and the state : a history of public health from ancient to modern times" 
+                                       href="https://wellcomecollection.org/works/pt8rkkk5">Available in the Wellcome Library</a>.
+                                    <br/>
+                                </li>
+                            </ul>
+
+
+                        </div><!-- /.fluid-column -->
+                        <div id="rhsCol" class="fixed-column">
+
+
+                            <h4 class="separator">Report highlight</h4>
+                            <a class="promo black img" href="/report/b18220678/24">
+                                <div class="contents">
+
+                                    <h4>Report for St Mary, Newington</h4>
+                                    <p class="meta">a map from the report, plotting deaths from respiratory diseases in 1899</p>
+                                </div>
+                                <img src="/assets/img/37532.jpg" alt="Report for St Mary, Newington"/>
+                            </a><!-- /.promo.xxx -->
+
+
+                            <h4 class="separator">In The Timeline</h4>
+                            <a href="/timeline/#35036" class="promo blue img closer">
+                                <div class="contents">
+                                    <h4><strong>1831:</strong> First UK national outbreak of cholera</h4>
+                                </div>
+                                <img src="/assets/timelines/moh/37639.jpg" 
+                                     width="240" alt="First UK national outbreak of cholera"/>
+                            </a><!-- /.promo.blue.img.closer -->
+
+                            <p>
+                                <a href="/timeline/#35036" class="action muted">Open the timeline</a>
+                            </p>
+
+
+                        </div><!-- /.fixed-column -->
+                    </div><!-- /.group.fixed-right -->
+
+
+                    <!-- wl:SocialLinks was here -->
+                </div><!-- /.fluid-column -->
+            </div><!-- /.group.fixed-left -->
+        </div><!-- /.wrap -->
+    </div><!-- /.section -->
+</section>
