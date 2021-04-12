@@ -1,0 +1,37 @@
+@model SearchModel
+
+@model Wellcome.MoH.Api.SearchModel
+@{
+    ViewData["Title"] = Constants.SiteTitle;
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "Search results";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+<section>
+<div class="section">
+    <div class="wrap">
+        
+        <ul id="lvlyul" class="breadcrumb" role="navigation">
+            <li><a href="/">Home</a></li>
+            <li>Search reports</li>
+        </ul>
+    
+        <h2>Search results</h2>
+        <div class="moh-search-hightlight">
+            <partial name="../Shared/_SearchTool.cshtml"/>
+        </div>
+
+        <div id="wlResultsInfo" class="group site-search-options">
+            <h3 id="MainContent_showingSummary" class="float-left"></h3>
+            
+            <fieldset class="site-search-option view-tables">
+                
+            </fieldset>
+            
+        </div>
+        
+        <!-- wl:SocialLinks was here -->
+    </div><!-- /.wrap -->
+</div><!-- /.section -->
+</section>    

@@ -1,0 +1,49 @@
+@model Wellcome.MoH.Api.SearchModel
+
+<form asp-controller="Home" asp-action="Search" method="get">
+    <div class="moh-search-form">
+        <div class="group third">
+            <div class="column">
+                <label for="keyword"><strong class="font-16">Search for</strong> (e.g., cholera)</label>
+                <input id="keyword" name="terms" type="text" data-clear value="@Context.Request.Query["terms"]">
+            </div>
+            <div class="column">
+                <label for="location"><strong class="font-16">in reports covering</strong> (e.g., Hammersmith)</label>
+                <input id="location" name="place" type="text" value="@Context.Request.Query["place"]">
+            </div>
+            <div class="column">
+                <label><strong class="font-16">between</strong></label>
+                <div class="slider"></div>
+                <select id="year-from" name="year-from">
+                    <option>From&#8230;</option>
+                    @foreach(int year in Model.GetYears())
+                    {
+                        if (year == Model.StartYear)
+                        {
+                            <option selected="selected" value="@year">@year</option>
+                        }
+                        else
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    }
+                </select>
+                <select id="year-to" name="year-to">
+                    <option>To&#8230;</option>
+                    @foreach(int year in Model.GetYears())
+                    {
+                        if (year == Model.EndYear)
+                        {
+                            <option selected="selected" value="@year">@year</option>
+                        }
+                        else
+                        {
+                            <option value="@year">@year</option>
+                        }
+                    }
+                </select>
+                <input class="button" type="submit" value="Search"/>
+            </div>
+        </div>
+    </div>
+</form>

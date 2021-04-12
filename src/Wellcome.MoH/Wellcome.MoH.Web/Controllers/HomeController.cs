@@ -1,14 +1,27 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Wellcome.MoH.Api;
 using Wellcome.MoH.Web.Models;
 
 namespace Wellcome.MoH.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private IServiceApi mohService;
+        
+        public HomeController(IServiceApi mohService)
+        {
+            this.mohService = mohService;
+        }
+        
         public IActionResult Index()
         {
-            return View();
+            return View(new SearchModel());
+        }
+
+        public IActionResult Search(SearchModel model)
+        {
+            return View(model);
         }
 
         public IActionResult About(string detail = null)

@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wellcome.MoH.Web", "Wellcome.MoH.Web\Wellcome.MoH.Web.csproj", "{D193FD23-2F18-4C74-996C-975823D61F94}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wellcome.MoH.Api", "Wellcome.MoH.Api\Wellcome.MoH.Api.csproj", "{D27662DA-FA30-441D-A616-D4BA69F37CD3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wellcome.MoH.Repository", "Wellcome.MoH.Repository\Wellcome.MoH.Repository.csproj", "{AE2930FC-B127-4BFC-A561-3B1EC7F7497F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{D193FD23-2F18-4C74-996C-975823D61F94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D193FD23-2F18-4C74-996C-975823D61F94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D193FD23-2F18-4C74-996C-975823D61F94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D27662DA-FA30-441D-A616-D4BA69F37CD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D27662DA-FA30-441D-A616-D4BA69F37CD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D27662DA-FA30-441D-A616-D4BA69F37CD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D27662DA-FA30-441D-A616-D4BA69F37CD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE2930FC-B127-4BFC-A561-3B1EC7F7497F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE2930FC-B127-4BFC-A561-3B1EC7F7497F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE2930FC-B127-4BFC-A561-3B1EC7F7497F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE2930FC-B127-4BFC-A561-3B1EC7F7497F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

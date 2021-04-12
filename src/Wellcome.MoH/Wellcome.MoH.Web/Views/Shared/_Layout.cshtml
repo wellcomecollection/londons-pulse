@@ -76,169 +76,165 @@
         </div><!-- /.section.header -->
     </header>
 
-
-    <form method="post" action="./" id="aspnetForm" class="library-site">
-
-        @if (ViewData["HideNav"] == null)
-        {
-            <section>
-                <div class="section header">
-                    <div class="grid-pattern page-heading subject-heading">
-                        <div class="wrap">
-
-                            <div class="">
-                                <!-- /.fixed-column -->
-                                <div class="group fluid-full" style="background-image: url(/assets/img/moh-heading.png)">
-                                    <div class="page-title no-artifact">
-                                        @if (ViewData["h2"] != null)
-                                        {
-                                            <h2>@ViewData["h2"]</h2>
-                                        }
-                                        <h1>@ViewData["h1"]</h1>
-                                    </div>
-                                    <div class="artifact">
-                                        <p class="information">
-                                            <a href="https://wellcomecollection.org/works/k7wrmubv/items?canvas=266">
-                                                Hints from the Health Department. Leaflet from the archive of the Society of Medical Officers of Health.
-                                            </a>
-                                            Credit: Wellcome Collection, London
-                                        </p>
-                                    </div><!-- /.artifact -->
-                                </div><!-- /.fluid-column -->
-                            </div><!-- /.group.fixed-left -->
-                        </div><!-- /.wrap -->
-                    </div><!-- /.grid-pattern.page-title -->
+    @if (ViewData["HideNav"] == null)
+    {
+        <section>
+            <div class="section header">
+                <div class="grid-pattern page-heading subject-heading">
                     <div class="wrap">
 
-                        <ul class="main-nav" role="navigation">
+                        <div class="">
+                            <!-- /.fixed-column -->
+                            <div class="group fluid-full" style="background-image: url(/assets/img/moh-heading.png)">
+                                <div class="page-title no-artifact">
+                                    @if (ViewData["h2"] != null)
+                                    {
+                                        <h2>@ViewData["h2"]</h2>
+                                    }
+                                    <h1>@ViewData["h1"]</h1>
+                                </div>
+                                <div class="artifact">
+                                    <p class="information">
+                                        <a href="https://wellcomecollection.org/works/k7wrmubv/items?canvas=266">
+                                            Hints from the Health Department. Leaflet from the archive of the Society of Medical Officers of Health.
+                                        </a>
+                                        Credit: Wellcome Collection, London
+                                    </p>
+                                </div><!-- /.artifact -->
+                            </div><!-- /.fluid-column -->
+                        </div><!-- /.group.fixed-left -->
+                    </div><!-- /.wrap -->
+                </div><!-- /.grid-pattern.page-title -->
+                <div class="wrap">
+
+                    <ul class="main-nav" role="navigation">
+                        <li>
+                            <navlink href="/">Home</navlink>
+                        </li>
+                        <li>
+                            <navlink href="/search/">Search The Reports</navlink>
+                        </li>
+                        <li>
+                            <navlink href="/about-the-reports/">About The Reports</navlink>
+                        </li>
+                        <li>
+                            <navlink href="/timeline/">Health of London Timeline</navlink>
+                        </li>
+                    </ul>
+
+
+                </div><!-- /.wrap-->
+            </div><!-- /.section.header -->
+        </section>
+    }
+
+    @RenderBody()
+
+    <footer>
+        <div class="section footer">
+            <div class="wrap">
+                <ul class="sitemap group third" role="navigation">
+                    <li class="column">
+                        <h6 id="hFooterGroup1">Searching the collections</h6>
+                        <ul>
                             <li>
-                                <navlink href="/">Home</navlink>
+                                <a class="action" href='/using-the-library/how-to/which-search-tool/'>Which search tool should I use?</a>
                             </li>
                             <li>
-                                <navlink href="/search/">Search The Reports</navlink>
+                                <a class="action" href='/search-the-catalogues/'>Search the catalogues</a>
                             </li>
                             <li>
-                                <navlink href="/about-the-reports/">About The Reports</navlink>
+                                <a class="action" href='/using-the-library/how-to/databases-a-z/'>Databases A-Z</a>
                             </li>
                             <li>
-                                <navlink href="/timeline/">Health of London Timeline</navlink>
+                                <a class="action" href='/using-the-library/how-to/request-and-delivery/'>Request and delivery</a>
+                            </li>
+                            <li>
+                                <a class="action" href='/collections/about-the-collections/'>About the collections</a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="column">
+                        <h6 id="hFooterGroup2">Visiting Us</h6>
+                        <ul>
+                            <li>
+                                <a class="action" href='/using-the-library/joining-the-library/'>Joining the Library</a>
+                            </li>
+                            <li>
+                                <a class="action" href='/using-the-library/visiting-the-library/how-to-find-us/'>How to find us</a>
+                            </li>
+                            <li>
+                                <a class="action" href='/using-the-library/services-and-facilities/'>Services and facilities</a>
+                            </li>
+                            <li>
+                                <a class="action" href='/using-the-library/visiting-the-library/access-for-visitors-with-disabilities/'>Access for visitors with disabilities</a>
+                            </li>
+                            <li>
+                                <a class="action" href='/using-the-library/visiting-the-library/opening-hours/'>Opening hours</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="column">
+                        <h6 id="hFooterGroup3">Community</h6>
+                        <ul>
+                            <li>
+                                <a href="http://twitter.com/wellcomelibrary" class="twitter-link" rel="me">Twitter: @@WellcomeLibrary </a>
+                            </li>
+                            <li>
+                                <a href="https://www.facebook.com/wellcomecollection/" class="facebook-link" rel="me">Wellcome Collection on Facebook</a>
+                            </li>
 
+                        </ul>
+                    </li>
+                </ul><!-- /.sitemap.group.third -->
+                <div class="group third">
+                    <div class="column two-thirds">
+                        <ul class="footer-nav" role="navigation">
+                            <li>
+                                <a href='/using-the-library/services-and-facilities/contact-us/'>Contact us</a>
+                            </li>
+                            <li>
+                                <a href='/what-we-do/'>What we do</a>
+                            </li>
+                            <li>
+                                <a href='/about-this-site/'>About this site</a>
+                            </li>
+                            <li>
+                                <a href='https://wellcome.ac.uk/about-us/privacy-and-terms'>Privacy and terms</a>
+                            </li>
+                            <li>
+                                <a href='/cookies/'>Cookies</a>
+                            </li>
+                            <li>
+                                <a href='/sitemap/'>Site map</a>
+                            </li>
+                        </ul><!-- /.footer-nav -->
+                        <p>
+                            <small>
+                                Except where otherwise noted, content on this site is licensed under a
+                                <a title="Creative Commons Attribution 4.0 International license" href="http://creativecommons.org/licenses/by/4.0/">
+                                    Creative Commons Attribution 4.0 International licence.
+                                </a><br/>
+                                Page last updated:
+                                <span id="lblUpdated">24 February 2021</span>
+                                &copy; Wellcome Trust 2021
+                                <!-- [<strong> <span id="lblBuild">BUILD: 0.115.0.0 (6d6e0909234e8004457aa8e11d6fb5743ed93b5d)</span> </strong>] -->
+                            </small>
+                        </p>
+                    </div><!-- /.column.two-thirds -->
+                    <div class="column text-right wellcome-trust">
+                        <p>
+                            <small>The Wellcome Library is part of the <strong>Wellcome Trust</strong></small>
+                        </p>
+                        <a href="http://www.wellcome.ac.uk/" title="Visit the Wellcome Trust">
+                            <img src="/assets/img/wellcome-trust-logo.png" alt="Wellcome Trust">
+                        </a>
+                    </div><!-- /.column -->
+                </div><!-- /.group.third -->
+            </div><!-- /.wrap -->
+        </div><!-- /.section.footer -->
 
-                    </div><!-- /.wrap-->
-                </div><!-- /.section.header -->
-            </section>
-        }
-
-        @RenderBody()
-
-        <footer>
-            <div class="section footer">
-                <div class="wrap">
-                    <ul class="sitemap group third" role="navigation">
-                        <li class="column">
-                            <h6 id="hFooterGroup1">Searching the collections</h6>
-                            <ul>
-                                <li>
-                                    <a class="action" href='/using-the-library/how-to/which-search-tool/'>Which search tool should I use?</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/search-the-catalogues/'>Search the catalogues</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/using-the-library/how-to/databases-a-z/'>Databases A-Z</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/using-the-library/how-to/request-and-delivery/'>Request and delivery</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/collections/about-the-collections/'>About the collections</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="column">
-                            <h6 id="hFooterGroup2">Visiting Us</h6>
-                            <ul>
-                                <li>
-                                    <a class="action" href='/using-the-library/joining-the-library/'>Joining the Library</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/using-the-library/visiting-the-library/how-to-find-us/'>How to find us</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/using-the-library/services-and-facilities/'>Services and facilities</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/using-the-library/visiting-the-library/access-for-visitors-with-disabilities/'>Access for visitors with disabilities</a>
-                                </li>
-                                <li>
-                                    <a class="action" href='/using-the-library/visiting-the-library/opening-hours/'>Opening hours</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="column">
-                            <h6 id="hFooterGroup3">Community</h6>
-                            <ul>
-                                <li>
-                                    <a href="http://twitter.com/wellcomelibrary" class="twitter-link" rel="me">Twitter: @@WellcomeLibrary </a>
-                                </li>
-                                <li>
-                                    <a href="https://www.facebook.com/wellcomecollection/" class="facebook-link" rel="me">Wellcome Collection on Facebook</a>
-                                </li>
-
-                            </ul>
-                        </li>
-                    </ul><!-- /.sitemap.group.third -->
-                    <div class="group third">
-                        <div class="column two-thirds">
-                            <ul class="footer-nav" role="navigation">
-                                <li>
-                                    <a href='/using-the-library/services-and-facilities/contact-us/'>Contact us</a>
-                                </li>
-                                <li>
-                                    <a href='/what-we-do/'>What we do</a>
-                                </li>
-                                <li>
-                                    <a href='/about-this-site/'>About this site</a>
-                                </li>
-                                <li>
-                                    <a href='https://wellcome.ac.uk/about-us/privacy-and-terms'>Privacy and terms</a>
-                                </li>
-                                <li>
-                                    <a href='/cookies/'>Cookies</a>
-                                </li>
-                                <li>
-                                    <a href='/sitemap/'>Site map</a>
-                                </li>
-                            </ul><!-- /.footer-nav -->
-                            <p>
-                                <small>
-                                    Except where otherwise noted, content on this site is licensed under a
-                                    <a title="Creative Commons Attribution 4.0 International license" href="http://creativecommons.org/licenses/by/4.0/">
-                                        Creative Commons Attribution 4.0 International licence.
-                                    </a><br/>
-                                    Page last updated:
-                                    <span id="lblUpdated">24 February 2021</span>
-                                    &copy; Wellcome Trust 2021
-                                    <!-- [<strong> <span id="lblBuild">BUILD: 0.115.0.0 (6d6e0909234e8004457aa8e11d6fb5743ed93b5d)</span> </strong>] -->
-                                </small>
-                            </p>
-                        </div><!-- /.column.two-thirds -->
-                        <div class="column text-right wellcome-trust">
-                            <p>
-                                <small>The Wellcome Library is part of the <strong>Wellcome Trust</strong></small>
-                            </p>
-                            <a href="http://www.wellcome.ac.uk/" title="Visit the Wellcome Trust">
-                                <img src="/assets/img/wellcome-trust-logo.png" alt="Wellcome Trust">
-                            </a>
-                        </div><!-- /.column -->
-                    </div><!-- /.group.third -->
-                </div><!-- /.wrap -->
-            </div><!-- /.section.footer -->
-
-        </footer>
-    </form>
+    </footer>
 </div><!-- /.page-wrap -->
 </body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>

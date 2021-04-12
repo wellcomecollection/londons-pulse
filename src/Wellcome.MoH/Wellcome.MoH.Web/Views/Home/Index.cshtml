@@ -1,244 +1,188 @@
-﻿@{
+﻿@model Wellcome.MoH.Api.SearchModel
+@{
     ViewData["Title"] = Constants.SiteTitle;
     ViewData["Description"] = "Medical Officer of Health reports for London 1848-1972";
     ViewData["h1"] = Constants.SiteTitle;
 }
 
+<section>
+    <div class="section">
+        <section>
+            <div class="section no-grid-pattern">
+                <div class="wrap">
+                    <div class="carousel">
+
+                        <a href="/about-the-reports/about-the-medical-officer-of-health-reports/" class="slide active">
+                            <img src="/assets/img/graph-hero.jpg" alt="">
+                            <div class="text">
+                                <h1>The Medical Officer of Health reports</h1>
+                                <p>
+                                    The reports provided statistical data about births, deaths and diseases, but they 
+                                    also allowed the authors to express the diversity of their local communities and 
+                                    their own personal interests.
+                                </p>
+                                <p>
+                                    <span class="a action blue">Read more about the reports</span>
+                                </p>
+                            </div><!-- /.text -->
+                        </a><!-- /.slide.active -->
+
+                        <a href="/about-the-reports/the-health-of-the-people/" class="slide">
+                            <img src="/assets/img/immunizing-hero.jpg" alt="">
+                            <div class="text">
+                                <h1>The health of the people</h1>
+                                <p>
+                                    The era of the Medical Officer Health saw the emergence of new ways of thinking 
+                                    about the connections between poverty, health and government.
+                                </p>
+                                <p>
+                                    <span class="a action blue">Read more about the health of the people</span>
+                                </p>
+                            </div><!-- /.text -->
+                        </a><!-- /.slide.active -->
+
+                        <a href="/about-the-reports/new-kind-of-medical-professional/" class="slide">
+                            <img src="/assets/img/clarks-cottages-hero.jpg" alt="">
+                            <div class="text">
+                                <h1>A new kind of medical professional</h1>
+                                <p>
+                                    The career of the Medical Officer of Health developed alongside a new public health 
+                                    infrastructure that included new institutions and new health professions.
+                                </p>
+                                <p>
+                                    <span class="a action blue">Learn more about the Medical Officers of Health</span>
+                                </p>
+                            </div><!-- /.text -->
+                        </a><!-- /.slide.active -->
+
+                        <a href="/about-the-reports/the-changing-face-of-london/" class="slide">
+                            <img src="/assets/img/blue-map-hero.jpg" alt="">
+                            <div class="text">
+                                <h1>The changing face of London</h1>
+                                <p>
+                                    Many of the daily concerns and shifting preoccupations of Londoners can be seen 
+                                    through the eyes of their Medical Officers of Heath.
+                                </p>
+                                <p>
+                                    <span class="a action blue">Read more about the changing face of London</span>
+                                </p>
+                            </div><!-- /.text -->
+                        </a><!-- /.slide.active -->
+
+                    </div><!-- /.carousel -->
+                </div><!-- /.wrap -->
+            </div><!-- /.section.grid-pattern -->
+        </section>
+
+        <section>
+            <div class="section search">
+                <div class="wrap">
+                    <div class="search-inner">
+                        <h3 class="subtle">Search the Reports</h3>
+                        <partial name="../Shared/_SearchTool.cshtml"/>
+                    </div><!-- /.search-inner -->
+                </div><!-- /.wrap -->
+            </div><!-- /.section.search -->
+        </section>
+    </div><!-- /.section -->
+</section>
 
 <section>
 <div class="section">
-
-    
-<section>
-<div class="section no-grid-pattern">
-    <div class="wrap">
-        <div class="carousel">
-            
-                    <a href="/about-the-reports/about-the-medical-officer-of-health-reports/" class="slide active">
-                        <img src="/assets/img/graph-hero.jpg" alt="">
-                        <div class="text">
-                            <h1>The Medical Officer of Health reports</h1>
-                            <p>The reports provided statistical data about births, deaths and diseases, but they also allowed the authors to express the diversity of their local communities and their own personal interests.</p>
-                            <p><span class="a action blue">Read more about the reports</span></p>
-                        </div><!-- /.text -->
-                    </a><!-- /.slide.active -->
-                
-                    <a href="/about-the-reports/the-health-of-the-people/" class="slide">
-                        <img src="/assets/img/immunizing-hero.jpg" alt="">
-                        <div class="text">
-                            <h1>The health of the people</h1>
-                            <p>The era of the Medical Officer Health saw the emergence of new ways of thinking about the connections between poverty, health and government.</p>
-                            <p><span class="a action blue">Read more about the health of the people</span></p>
-                        </div><!-- /.text -->
-                    </a><!-- /.slide.active -->
-                
-                    <a href="/about-the-reports/new-kind-of-medical-professional/" class="slide">
-                        <img src="/assets/img/clarks-cottages-hero.jpg" alt="">
-                        <div class="text">
-                            <h1>A new kind of medical professional</h1>
-                            <p>The career of the Medical Officer of Health developed alongside a new public health infrastructure that included new institutions and new health professions. </p>
-                            <p><span class="a action blue">Learn more about the Medical Officers of Health</span></p>
-                        </div><!-- /.text -->
-                    </a><!-- /.slide.active -->
-                
-                    <a href="/about-the-reports/the-changing-face-of-london/" class="slide">
-                        <img src="/assets/img/blue-map-hero.jpg" alt="">
-                        <div class="text">
-                            <h1>The changing face of London</h1>
-                            <p>Many of the daily concerns and shifting preoccupations of Londoners can be seen through the eyes of their Medical Officers of Heath.</p>
-                            <p><span class="a action blue">Read more about the changing face of London</span></p>
-                        </div><!-- /.text -->
-                    </a><!-- /.slide.active -->
-                
-        </div><!-- /.carousel -->
-    </div><!-- /.wrap -->
-</div><!-- /.section.grid-pattern -->
-</section>
+<div class="wrap">
 
 
-
-    
-    <section>
-        <div class="section search">
-            <div class="wrap">
-                <div class="search-inner">
-                    <h3 class="subtle">Search the Reports</h3>
-                    
-            
-<div class="moh-search-form">
-    <div class="group third">
-        <div class="column">
-            <label for="keyword"><strong class="font-16">Search for</strong> (e.g., cholera)</label>
-            <input id="keyword" name="terms" type="text" data-clear value="">
-        </div>
-        <div class="column">
-            <label for="location"><strong class="font-16">in reports covering</strong> (e.g., Hammersmith)</label>
-            <input id="location" name="place" type="text" value="">
-        </div>
-        <div class="column">
-            <label><strong class="font-16">between</strong></label>
-            <div class="slider"></div>
-            <select id="year-from" name="year-from">
-                <option>From&#8230;</option>
-                <option selected="selected" value="1848">1848</option>
-                @for (int year = 1849; year <= 1972; year++)
-                {
-                    <option value="@year">@year</option> 
-                }
-            </select>
-            <select id="year-to" name="year-to">
-                <option>To&#8230;</option>
-                @for (int year = 1848; year <= 1971; year++)
-                {
-                    <option value="@year">@year</option> 
-                }
-                <option selected="selected" value="1972">1972</option>
-            </select>
-            <input class="button" type="submit" value="Search"/>
-        </div>
+<div class="group third">
+<div class="column two-thirds">
+    <div class="dominant">
+        <h3 class="float-left">Browse boroughs</h3>
+        <div class="tooltip float-left">
+            <span class="tooltip-icon">?</span>
+            <span class="tooltip-content">Boroughs formed by the Local Government Act 1963 plus London County Council and Port of London</span>
+        </div><!-- /.tooltip -->
     </div>
-</div>
 
-                </div><!-- /.search-inner -->
-            </div><!-- /.wrap -->
-        </div><!-- /.section.search -->
-    </section>
-</div><!-- /.section -->
-</section>
 
-<section>
-<div class="section">
-    <div class="wrap">
-         
-
-        <div class="group third">
-            <div class="column two-thirds">
-                <div class="dominant">
-                    <h3 class="float-left">Browse boroughs</h3>
-                    <div class="tooltip float-left">
-                        <span class="tooltip-icon">?</span>
-                        <span class="tooltip-content">Boroughs formed by the Local Government Act 1963 plus London County Council and Port of London</span>
-                    </div><!-- /.tooltip -->
-                </div>
-                
-                
-                <div class="group third boroughs-by-name">
-                    <div class="column">
-                        <ul class="subject-guides-list">
-                            
-                                    <li><a class="action font-14" href="browse-normalised/Barking and Dagenham">Barking and Dagenham</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Barnet">Barnet</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Bexley">Bexley</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Brent">Brent</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Bromley">Bromley</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Camden">Camden</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/City of London">City of London</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/City of Westminster">City of Westminster</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Croydon">Croydon</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Ealing">Ealing</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Enfield">Enfield</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Greenwich">Greenwich</a></li>
-                                
-                        </ul><!-- /.subject-guides-list -->
-                    </div><!-- /.column -->
-                    <div class="column">
-                        <ul class="subject-guides-list">
-                            
-                                    <li><a class="action font-14" href="browse-normalised/Hackney">Hackney</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Hammersmith and Fulham">Hammersmith and Fulham</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Haringey">Haringey</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Harrow">Harrow</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Havering">Havering</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Hillingdon">Hillingdon</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Hounslow">Hounslow</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Islington">Islington</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Kensington and Chelsea">Kensington and Chelsea</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Kingston upon Thames">Kingston upon Thames</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Lambeth">Lambeth</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Lewisham">Lewisham</a></li>
-                                
-                        </ul><!-- /.subject-guides-list -->
-                    </div><!-- /.column -->
-                    <div class="column">
-                        <ul class="subject-guides-list">
-                            
-                                    <li><a class="action font-14" href="browse-normalised/London County Council">London County Council</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Merton">Merton</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Newham">Newham</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Port of London">Port of London</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Redbridge">Redbridge</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Richmond upon Thames">Richmond upon Thames</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Southwark">Southwark</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Sutton">Sutton</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Tower Hamlets">Tower Hamlets</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Waltham Forest">Waltham Forest</a></li>
-                                
-                                    <li><a class="action font-14" href="browse-normalised/Wandsworth">Wandsworth</a></li>
-                                
-                        </ul><!-- /.subject-guides-list -->
-                    </div><!-- /.column -->
-                </div><!-- /.group.half -->
-            </div><!-- /.column -->
-            <div class="column">
-                <h3 class="dominant">Browse date range</h3>
-                <ul class="subject-guides-list">
-                    <li><a class="action font-14" href="browse/?startYear=1848&endYear=1859">1848 - 1859</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1860&endYear=1869">1860 - 1869</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1870&endYear=1879">1870 - 1879</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1880&endYear=1889">1880 - 1889</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1890&endYear=1899">1890 - 1899</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1900&endYear=1909">1900 - 1909</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1910&endYear=1919">1910 - 1919</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1920&endYear=1929">1920 - 1929</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1930&endYear=1939">1930 - 1939</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1940&endYear=1949">1940 - 1949</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1950&endYear=1959">1950 - 1959</a></li>
-                    <li><a class="action font-14" href="browse/?startYear=1960&endYear=1972">1960 - 1972</a></li>
-                </ul><!-- /.subject-guides-list -->
-            </div><!-- /.column -->
-        </div><!-- /.group.third -->
-        
-        
-<hr />
+    <div class="group third boroughs-by-name">
+        <div class="column">
+            <ul class="subject-guides-list">
+                <li><a class="action font-14" href="browse-normalised/Barking and Dagenham">Barking and Dagenham</a></li>
+                <li><a class="action font-14" href="browse-normalised/Barnet">Barnet</a></li>
+                <li><a class="action font-14" href="browse-normalised/Bexley">Bexley</a></li>
+                <li><a class="action font-14" href="browse-normalised/Brent">Brent</a></li>
+                <li><a class="action font-14" href="browse-normalised/Bromley">Bromley</a></li>
+                <li><a class="action font-14" href="browse-normalised/Camden">Camden</a></li>
+                <li><a class="action font-14" href="browse-normalised/City of London">City of London</a></li>
+                <li><a class="action font-14" href="browse-normalised/City of Westminster">City of Westminster</a></li>
+                <li><a class="action font-14" href="browse-normalised/Croydon">Croydon</a></li>
+                <li><a class="action font-14" href="browse-normalised/Ealing">Ealing</a></li>
+                <li><a class="action font-14" href="browse-normalised/Enfield">Enfield</a></li>
+                <li><a class="action font-14" href="browse-normalised/Greenwich">Greenwich</a></li>
+            </ul><!-- /.subject-guides-list -->
+        </div><!-- /.column -->
+        <div class="column">
+            <ul class="subject-guides-list">
+                <li><a class="action font-14" href="browse-normalised/Hackney">Hackney</a></li>
+                <li><a class="action font-14" href="browse-normalised/Hammersmith and Fulham">Hammersmith and Fulham</a></li>
+                <li><a class="action font-14" href="browse-normalised/Haringey">Haringey</a></li>
+                <li><a class="action font-14" href="browse-normalised/Harrow">Harrow</a></li>
+                <li><a class="action font-14" href="browse-normalised/Havering">Havering</a></li>
+                <li><a class="action font-14" href="browse-normalised/Hillingdon">Hillingdon</a></li>
+                <li><a class="action font-14" href="browse-normalised/Hounslow">Hounslow</a></li>
+                <li><a class="action font-14" href="browse-normalised/Islington">Islington</a></li>
+                <li><a class="action font-14" href="browse-normalised/Kensington and Chelsea">Kensington and Chelsea</a></li>
+                <li><a class="action font-14" href="browse-normalised/Kingston upon Thames">Kingston upon Thames</a></li>
+                <li><a class="action font-14" href="browse-normalised/Lambeth">Lambeth</a></li>
+                <li><a class="action font-14" href="browse-normalised/Lewisham">Lewisham</a></li>
+            </ul><!-- /.subject-guides-list -->
+        </div><!-- /.column -->
+        <div class="column">
+            <ul class="subject-guides-list">
+                <li><a class="action font-14" href="browse-normalised/London County Council">London County Council</a></li>
+                <li><a class="action font-14" href="browse-normalised/Merton">Merton</a></li>
+                <li><a class="action font-14" href="browse-normalised/Newham">Newham</a></li>
+                <li><a class="action font-14" href="browse-normalised/Port of London">Port of London</a></li>
+                <li><a class="action font-14" href="browse-normalised/Redbridge">Redbridge</a></li>
+                <li><a class="action font-14" href="browse-normalised/Richmond upon Thames">Richmond upon Thames</a></li>
+                <li><a class="action font-14" href="browse-normalised/Southwark">Southwark</a></li>
+                <li><a class="action font-14" href="browse-normalised/Sutton">Sutton</a></li>
+                <li><a class="action font-14" href="browse-normalised/Tower Hamlets">Tower Hamlets</a></li>
+                <li><a class="action font-14" href="browse-normalised/Waltham Forest">Waltham Forest</a></li>
+                <li><a class="action font-14" href="browse-normalised/Wandsworth">Wandsworth</a></li>
+            </ul><!-- /.subject-guides-list -->
+        </div><!-- /.column -->
+    </div><!-- /.group.half -->
+</div><!-- /.column -->
+<div class="column">
+    <h3 class="dominant">Browse date range</h3>
+    <ul class="subject-guides-list">
+        <li><a class="action font-14" href="browse/?startYear=1848&endYear=1859">1848 - 1859</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1860&endYear=1869">1860 - 1869</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1870&endYear=1879">1870 - 1879</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1880&endYear=1889">1880 - 1889</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1890&endYear=1899">1890 - 1899</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1900&endYear=1909">1900 - 1909</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1910&endYear=1919">1910 - 1919</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1920&endYear=1929">1920 - 1929</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1930&endYear=1939">1930 - 1939</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1940&endYear=1949">1940 - 1949</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1950&endYear=1959">1950 - 1959</a></li>
+        <li><a class="action font-14" href="browse/?startYear=1960&endYear=1972">1960 - 1972</a></li>
+    </ul><!-- /.subject-guides-list -->
+</div><!-- /.column -->
+</div><!-- /.group.third -->
+    
+<hr/>
 <p>
-	<img title="" alt="Jisc logo" src="/assets/img/jisc-logo.png" width="91" height="55" style="border-bottom: 0px solid; border-left: 0px solid; margin: 0px 5px; width: 91px; height: 55px; vertical-align: middle; border-top: 0px solid; border-right: 0px solid" /><strong>London's&nbsp;Pulse: Medical Officer of Health reports 1848-1972</strong>&nbsp;was funded in part&nbsp;by <a title="Jisc" href="https://www.jisc.ac.uk/">Jisc</a>. 
+    <img title="" alt="Jisc logo" src="/assets/img/jisc-logo.png" width="91" height="55" style="border-bottom: 0px solid; border-left: 0px solid; margin: 0px 5px; width: 91px; height: 55px; vertical-align: middle; border-top: 0px solid; border-right: 0px solid"/><strong>London's&nbsp;Pulse: Medical Officer of Health reports 1848-1972</strong>&nbsp;was funded in part&nbsp;by <a title="Jisc" href="https://www.jisc.ac.uk/">Jisc</a>.
 </p>
-<p><a title="London Metropolitan Archives" href="http://www.cityoflondon.gov.uk/things-to-do/visiting-the-city/archives-and-city-history/london-metropolitan-archives/Pages/default.aspx" target="_blank">
-		<img title="" alt="LMA logo" src="/assets/img/LMA-logo.png" width="91" height="55" style="border-bottom: 0px solid; border-left: 0px solid; margin: 0px 5px; width: 91px; height: 55px; vertical-align: middle; border-top: 0px solid; border-right: 0px solid" /></a>With a contribution of 580 reports from the <a title="London Metropolitan Archives" href="https://www.cityoflondon.gov.uk/things-to-do/history-and-heritage/london-metropolitan-archives" target="_blank">London Metropolitan Archives</a>. 
+<p>
+    <a title="London Metropolitan Archives" href="http://www.cityoflondon.gov.uk/things-to-do/visiting-the-city/archives-and-city-history/london-metropolitan-archives/Pages/default.aspx" target="_blank">
+        <img title="" alt="LMA logo" src="/assets/img/LMA-logo.png" width="91" height="55" style="border-bottom: 0px solid; border-left: 0px solid; margin: 0px 5px; width: 91px; height: 55px; vertical-align: middle; border-top: 0px solid; border-right: 0px solid"/>
+    </a>With a contribution of 580 reports from the <a title="London Metropolitan Archives" href="https://www.cityoflondon.gov.uk/things-to-do/history-and-heritage/london-metropolitan-archives" target="_blank">London Metropolitan Archives</a>.
 </p>
 
 
-    </div><!-- /.wrap -->
+</div><!-- /.wrap -->
 </div><!-- /.section -->
 </section>

@@ -43,4 +43,8 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Wellcome.MoH.Api\Wellcome.MoH.Api.csproj" />
+    </ItemGroup>
+
 </Project>
