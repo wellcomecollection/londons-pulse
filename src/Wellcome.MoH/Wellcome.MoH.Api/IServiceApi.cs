@@ -83,6 +83,9 @@ namespace Wellcome.MoH.Api
         /// <param name="pageSize"></param>
         /// <param name="tablesOnly"></param>
         /// <param name="groupIntoReports"></param>
+        /// <param name="useSpecialGroupingBehaviour"></param>
+        /// <param name="visibleHitsPerReport"></param>
+        /// <param name="expandoThreshold"></param>
         /// <returns></returns>
         ReportsResult Search(string constrainedPlaceName, int startYear, int endYear,
             string terms, int page, int pageSize, bool tablesOnly, bool groupIntoReports,

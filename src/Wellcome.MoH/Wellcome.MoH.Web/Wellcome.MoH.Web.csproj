@@ -45,6 +45,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Wellcome.MoH.Api\Wellcome.MoH.Api.csproj" />
+      <ProjectReference Include="..\Wellcome.MoH.Repository\Wellcome.MoH.Repository.csproj" />
     </ItemGroup>
 
 </Project>

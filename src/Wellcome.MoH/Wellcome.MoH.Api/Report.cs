@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Wellcome.MoH.Api
 {
@@ -24,5 +26,13 @@ namespace Wellcome.MoH.Api
         // additionally required for searching
         public TableSummary[] TableSummaries { get; set; } // also used for report cover (browse whole report)
         public TextHit[] TextHits { get; set; }
+
+        public Hit[] GetHitsByRank()
+        {
+            var flattenedHits = new List<Hit>();
+            flattenedHits.AddRange(TableSummaries);
+            flattenedHits.AddRange(TextHits);
+            return flattenedHits.OrderByDescending(h => h.Rank).ToArray();
+        }
     }
 }

@@ -1,6 +1,5 @@
+@using Wellcome.MoH.Api
 @model SearchModel
-
-@model Wellcome.MoH.Api.SearchModel
 @{
     ViewData["Title"] = Constants.SiteTitle;
     ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
@@ -22,16 +21,109 @@
             <partial name="../Shared/_SearchTool.cshtml"/>
         </div>
 
-        <div id="wlResultsInfo" class="group site-search-options">
-            <h3 id="MainContent_showingSummary" class="float-left"></h3>
-            
-            <fieldset class="site-search-option view-tables">
-                
-            </fieldset>
-            
-        </div>
         
-        <!-- wl:SocialLinks was here -->
+        @if (Model.ReportsResult.HasResults)
+        {
+            <div id="wlResultsInfo" class="group site-search-options">
+                <h3 class="float-left">Showing 
+                    <strong>@ViewData["FirstCount"] &mdash; @ViewData["LastCount"]</strong> of 
+                    @if (Model.ReportsResult.TotalResults == 400)
+                    {
+                        <text>more than </text>
+                    }
+                    <strong>@Model.ReportsResult.TotalVisibleResults results</strong> 
+                    across @Model.ReportsResult.TotalReports reports
+                </h3>
+            
+                <fieldset class="site-search-option view-tables">
+                    <a href="@ViewData["TableToggleUrl"]">
+                        @if (Model.TablesOnly)
+                        {
+                            <text>View tables and text</text>
+                        }
+                        else
+                        {
+                            <text>View tables only</text>
+                        }
+                    </a>
+                </fieldset>
+            </div>
+            
+            <ul class="site-search-results">
+                @foreach (var report in Model.ReportsResult.PageOfReports)
+                {                
+                    <li class=result>
+                        <div class="group fixed-left">
+                            <div class="fixed-column">
+                                <h4 class="result-title">
+                                    <a asp-controller="Home" asp-action="Report" asp-route-id="@report.BNumber">
+                                        @report.DisplayPlace @report.Year
+                                    </a>
+                                </h4>
+                                <img src="@report.Thumbnail" alt="Cover page of @report.BNumber"/>
+                            </div>
+                            <div class="fluid-column">
+                                @{
+                                    var hitsForReport = report.GetHitsByRank();
+                                    for (int counter = 0; counter < hitsForReport.Length; counter++)
+                                    {
+                                        var hit = hitsForReport[counter];
+                                        if (counter == 5)
+                                        {
+                                            int remaining = hitsForReport.Length - counter;
+                                            // don't bother with the expando bit if there's only a couple of stragglers
+                                            if (remaining > 2)
+                                            {
+                                                <p class="result-view-more"><a href=#>View @remaining more results for this report</a></p>
+                                            }
+                                        }
+                                        if (hit is TableSummary tableSummary)
+                                        {
+                                            <h5>
+                                                <a href="/report/@report.BNumber/@hit.PageIndex#?asi=0&ai=@hit.PageIndex"
+                                                   class="result-type-table">Table on page @tableSummary.OrderLabel</a>
+                                            </h5>
+                                            <div class="excerpt">
+                                                <h6 class="table-caption">
+                                                    @tableSummary.Caption.HtmlSummaryAsText()
+                                                </h6>
+                                                <div class="table-content">
+                                                    <table>@Html.Raw(tableSummary.HeaderSummary)</table>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (hit is TextHit textHit)
+                                        {
+                                            <h5>
+                                                <a href="/report/@report.BNumber/@hit.PageIndex#?asi=0&ai=@hit.PageIndex"
+                                                   class="result-type-text">Text on page @textHit.OrderLabel</a>
+                                            </h5>
+                                            <div class="excerpt">
+                                                <p>@Html.Raw(textHit.Extract)</p>
+                                            </div>
+                                        }
+                                    }
+                                }
+                            </div><!-- /.fluid-column -->
+                        </div><!-- /.group.fixed-left -->
+                    </li><!-- /.result -->
+                }
+            </ul>
+            
+            
+            @Html.Raw(ViewData["Pager"])
+        }
+        else if(!string.IsNullOrEmpty(Model.Terms))
+        {        
+            <h4 class="separator">Sorry, no results found</h4>
+            <h5>Try these three tips for better results:</h5>
+            <ul>	
+                <li>Expand your search by changing the date range.</li>
+                <li>Consider alternative words or phrases. Disease names and medical terminology may have changed over time. </li>
+                <li>Check the spelling. </li>
+            </ul>
+        }
+        
     </div><!-- /.wrap -->
 </div><!-- /.section -->
 </section>    

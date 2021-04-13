@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Wellcome.MoH.Api;
+using Wellcome.MoH.Repository;
 
 namespace Wellcome.MoH.Web
 {
@@ -29,6 +31,8 @@ namespace Wellcome.MoH.Web
             {
                 builder.AddRazorRuntimeCompilation();
             }
+            // TODO - use the straight-to-DB version
+            services.AddSingleton<IServiceApi, JsonConsumer>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -59,7 +63,8 @@ namespace Wellcome.MoH.Web
                     defaults: new {controller = "Home", action = "About"});
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{action=Index}/{id?}",
+                    defaults: new {controller = "Home" });
             });
         }
     }

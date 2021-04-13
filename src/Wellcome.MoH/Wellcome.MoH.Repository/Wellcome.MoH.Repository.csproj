@@ -8,4 +8,8 @@
       <ProjectReference Include="..\Wellcome.MoH.Api\Wellcome.MoH.Api.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
+
 </Project>

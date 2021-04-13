@@ -10,5 +10,8 @@ namespace Wellcome.MoH.Api
         public int TotalReports { get; set; } // only used in search
         public int TotalVisibleResults { get; set; } // only used in search, and for special paging behaviour
         public bool PreCanned { get; set; }
+
+
+        public bool HasResults => TotalResults > 0;
     }
 }
