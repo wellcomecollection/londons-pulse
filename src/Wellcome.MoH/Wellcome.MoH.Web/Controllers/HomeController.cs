@@ -125,7 +125,30 @@ namespace Wellcome.MoH.Web.Controllers
             return reports;
         }
 
+        public IActionResult BrowseNormalised(string id, SearchModel model)
+        {
+            model.SetDefaults();
+            model.NormalisedPlace = id;
+            model.Place = null; // can't have both!
+            model.ReportsResult = mohService.BrowseNormalised(
+                model.NormalisedPlace, 
+                model.StartYear, model.EndYear, 
+                model.Page, model.PageSize, 
+                model.Ordering);
+            return View("Browse", model);
+        }
+
+        public IActionResult Browse(SearchModel model)
+        {
+            
+        }
+
         public IActionResult Report(string id)
+        {
+            throw new NotImplementedException();
+        }
+        
+        public IActionResult Page(string id, int index)
         {
             throw new NotImplementedException();
         }

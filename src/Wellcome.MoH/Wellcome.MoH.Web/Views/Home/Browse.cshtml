@@ -1,0 +1,145 @@
+@using Wellcome.MoH.Api
+@model SearchModel
+@{
+    ViewData["Title"] = Constants.SiteTitle;
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "Search results";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+<section>
+<div class="section">
+    <div class="wrap">
+        <ul id="lvlyul" class="breadcrumb" role="navigation">
+            <li><a href="/moh/">Home</a></li>
+            <li>@ViewData["Title"] TODO Browse boroughs: Hammersmith and Fulham</li>
+        </ul>
+
+        <h2>Browse results</h2>
+        <div class="moh-search-hightlight">
+            <partial name="../Shared/_SearchTool.cshtml"/>
+        </div>
+    
+        @if (Model.ReportsResult.HasResults)
+        {
+            <div id="wlResultsInfo" class="group site-search-options track-link">
+                <h3 class="float-left">
+                    Showing
+                    <strong>@ViewData["FirstCount"] &mdash; @ViewData["LastCount"]</strong> of
+                    @if (Model.ReportsResult.TotalResults == 400)
+                    {
+                        <text>more than </text>
+                    }
+                    <strong>@Model.ReportsResult.TotalVisibleResults results</strong>
+                    across @Model.ReportsResult.TotalReports reports
+                </h3>
+            
+                <input type="hidden" name="linkTemplate" id="linkTemplate" value="Download all ($format$)" />
+                <input type="hidden" name="dropTemplate" id="dropTemplate" value="tables as $format$" />
+                
+                @if(Model.ReportsResult.TotalResults > 100 && !Model.ReportsResult.PreCanned)
+                {
+                    <fieldset class="site-search-option download-as" id="fsNoDownload">
+                        <div class="option-menu" style="padding-right: 0.75em;">
+                            <a href="/about-the-reports/using-the-report-data/#downloads">Download options</a>
+                        </div>
+                    </fieldset>
+                }
+                else
+                {
+                    <!-- search-option-downloadas.html -->
+                    <fieldset class="site-search-option download-as" data-replace="download-as">
+                        <label>Download all as:
+                            <select>
+                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=txt" data-format="txt" data-note="(with pipe as delimiter)">text</option>
+                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=html" data-format="html">HTML</option>
+                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=csv" data-format="csv">CSV</option>
+                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=xml" data-format="xml">XML</option>
+                            </select>
+                        </label>
+                        <input type="submit" value="Download"/>
+                    </fieldset>
+                    
+                }
+                
+                <!-- search-option-orderby.html -->
+                <fieldset class="site-search-option order-by" data-replace="order-by">
+                    <label>Order by:
+                        <select class="order-by" name="orderby">
+                            <option value="date">Date</option>
+                            <option id="byTitle" value="title">Title</option>
+                        </select>
+                    </label>
+                </fieldset>
+            
+            </div>
+        
+            <ul class="site-search-results">
+                @foreach (var result in Model.ReportsResult.PageOfReports)
+                {
+                    
+                }
+
+
+                <li class="result">
+                    <div class="group fixed-right">
+                        <div class="fluid-column">
+                            <img src="https://wellcomelibrary.org/service/workthumb/b1995329x/0" alt="" width="60" class="float-left"/>
+                            <h4 class="result-title">
+                                <a href="../report/b1995329x">
+                                    Fulham 1859
+                                </a></h4>
+                            <p>[Report of the Medical Officer of Health for Fulham]</p>
+                        </div><!-- /.fixed-column -->
+                        <div class="fixed-column">
+                            <dl class="properties">
+                                <dt>Published</dt>
+                                <dd>1860</dd>
+
+                                <dt>Pages</dt>
+                                <dd>16</dd>
+                                <dt>Tables</dt>
+                                <dd>16</dd>
+                            </dl>
+                        </div><!-- /.fluid-column -->
+                    </div><!-- /.group.fixed-left -->
+                </li><!-- /.result -->
+
+
+            </ul>
+            
+        
+        
+        
+        <h4 class="separator">Results 1-20 of 176</h4>
+<ul class="pagination site-search-pagination">
+<li class="prev">Back</li>
+<li class="next"><a href="/moh/browse-normalised/Hammersmith and Fulham?page=2">Next<!-- next 20 --></a></li>
+<ol>
+<li class="current">1</li>
+<li><a href="/moh/browse-normalised/Hammersmith and Fulham?page=2">2</a></li>
+</ol>
+</ul>
+            
+            
+        }
+        else
+        {
+            <h4 class="separator">Sorry, no results found</h4>
+            <h5>Looking for a place, street or building name? </h5>
+            <ul>	
+                <li>Place names on this website are based on large administrative authorities like boroughs, districts or parishes.</li>
+                <li>
+                    If you’re looking for a more specific name that is not a formal authority, e.g. Peckham Rye, try 
+                    your search in the <strong>'Search for'</strong> box instead. You can also use quotation marks to 
+                    quickly search for roads, streets, parks: "bethnal green road".
+                </li>
+                <li>At present, no postcode data is available. </li>
+            </ul>
+
+        }
+
+        
+    </div><!-- /.wrap -->
+</div><!-- /.section -->
+</section>    

@@ -22,6 +22,9 @@ namespace Wellcome.MoH.Web.Models
         
         [FromQuery]
         public string Place { get; set; }
+        
+        [FromQuery]
+        public string NormalisedPlace { get; set; }
 
         [FromQuery]
         public bool TablesOnly { get; set; }
@@ -33,6 +36,7 @@ namespace Wellcome.MoH.Web.Models
         public int PageSize { get; set; }
 
         public ReportsResult ReportsResult { get; set; }
+        public Ordering Ordering { get; set; }
 
         public void SetDefaults()
         {
