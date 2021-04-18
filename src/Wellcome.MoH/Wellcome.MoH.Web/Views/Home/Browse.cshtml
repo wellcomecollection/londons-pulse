@@ -11,8 +11,17 @@
 <div class="section">
     <div class="wrap">
         <ul id="lvlyul" class="breadcrumb" role="navigation">
-            <li><a href="/moh/">Home</a></li>
-            <li>@ViewData["Title"] TODO Browse boroughs: Hammersmith and Fulham</li>
+            <li><a href="/">Home</a></li>
+            <li>
+                @if (string.IsNullOrWhiteSpace(Model.NormalisedPlace))
+                {
+                    <text>Browse reports</text>
+                }
+                else
+                {
+                    <text>Browse boroughs: </text> @Model.NormalisedPlace
+                }
+            </li>
         </ul>
 
         <h2>Browse results</h2>
@@ -26,17 +35,9 @@
                 <h3 class="float-left">
                     Showing
                     <strong>@ViewData["FirstCount"] &mdash; @ViewData["LastCount"]</strong> of
-                    @if (Model.ReportsResult.TotalResults == 400)
-                    {
-                        <text>more than </text>
-                    }
-                    <strong>@Model.ReportsResult.TotalVisibleResults results</strong>
-                    across @Model.ReportsResult.TotalReports reports
+                    <strong>@Model.ReportsResult.TotalResults reports</strong>
                 </h3>
             
-                <input type="hidden" name="linkTemplate" id="linkTemplate" value="Download all ($format$)" />
-                <input type="hidden" name="dropTemplate" id="dropTemplate" value="tables as $format$" />
-                
                 @if(Model.ReportsResult.TotalResults > 100 && !Model.ReportsResult.PreCanned)
                 {
                     <fieldset class="site-search-option download-as" id="fsNoDownload">
@@ -47,19 +48,7 @@
                 }
                 else
                 {
-                    <!-- search-option-downloadas.html -->
-                    <fieldset class="site-search-option download-as" data-replace="download-as">
-                        <label>Download all as:
-                            <select>
-                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=txt" data-format="txt" data-note="(with pipe as delimiter)">text</option>
-                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=html" data-format="html">HTML</option>
-                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=csv" data-format="csv">CSV</option>
-                                <option value="/service/moh/zip?op=Hammersmith+and+Fulham&useNormalisedPlace=true&format=xml" data-format="xml">XML</option>
-                            </select>
-                        </label>
-                        <input type="submit" value="Download"/>
-                    </fieldset>
-                    
+                    <partial name="../Shared/_DownloadAs.cshtml" />
                 }
                 
                 <!-- search-option-orderby.html -->
@@ -67,7 +56,14 @@
                     <label>Order by:
                         <select class="order-by" name="orderby">
                             <option value="date">Date</option>
-                            <option id="byTitle" value="title">Title</option>
+                            @if (Model.Ordering == Ordering.DisplayName)
+                            {
+                                <option value="title" selected="selected">Title</option>
+                            }
+                            else
+                            {
+                                <option value="title">Title</option>
+                            }
                         </select>
                     </label>
                 </fieldset>
@@ -75,53 +71,38 @@
             </div>
         
             <ul class="site-search-results">
-                @foreach (var result in Model.ReportsResult.PageOfReports)
+                @foreach (var report in Model.ReportsResult.PageOfReports)
                 {
-                    
+                    <li class="result">
+                        <div class="group fixed-right">
+                            <div class="fluid-column">
+                                <img src="@report.Thumbnail" alt="" width="60" class="float-left"/>
+                                <h4 class="result-title">
+                                    <a href="/report/@report.BNumber">@report.DisplayPlace @report.Year</a>
+                                </h4>
+                                <p>@report.Title</p>
+                            </div><!-- /.fixed-column -->
+                            <div class="fixed-column">
+                                <dl class="properties">
+                                    <dt>Published</dt>
+                                    <dd>@report.PublicationYear</dd>
+                                    @if (!string.IsNullOrWhiteSpace(report.Author))
+                                    {
+                                        <dt>Author</dt>
+                                        <dd>@report.Author</dd>
+                                    }
+                                    <dt>Pages</dt>
+                                    <dd>@report.PageCount</dd>
+                                    <dt>Tables</dt>
+                                    <dd>@report.TableCount</dd>
+                                </dl>
+                            </div><!-- /.fluid-column -->
+                        </div><!-- /.group.fixed-left -->
+                    </li><!-- /.result -->
                 }
-
-
-                <li class="result">
-                    <div class="group fixed-right">
-                        <div class="fluid-column">
-                            <img src="https://wellcomelibrary.org/service/workthumb/b1995329x/0" alt="" width="60" class="float-left"/>
-                            <h4 class="result-title">
-                                <a href="../report/b1995329x">
-                                    Fulham 1859
-                                </a></h4>
-                            <p>[Report of the Medical Officer of Health for Fulham]</p>
-                        </div><!-- /.fixed-column -->
-                        <div class="fixed-column">
-                            <dl class="properties">
-                                <dt>Published</dt>
-                                <dd>1860</dd>
-
-                                <dt>Pages</dt>
-                                <dd>16</dd>
-                                <dt>Tables</dt>
-                                <dd>16</dd>
-                            </dl>
-                        </div><!-- /.fluid-column -->
-                    </div><!-- /.group.fixed-left -->
-                </li><!-- /.result -->
-
-
             </ul>
             
-        
-        
-        
-        <h4 class="separator">Results 1-20 of 176</h4>
-<ul class="pagination site-search-pagination">
-<li class="prev">Back</li>
-<li class="next"><a href="/moh/browse-normalised/Hammersmith and Fulham?page=2">Next<!-- next 20 --></a></li>
-<ol>
-<li class="current">1</li>
-<li><a href="/moh/browse-normalised/Hammersmith and Fulham?page=2">2</a></li>
-</ol>
-</ul>
-            
-            
+            @Html.Raw(ViewData["Pager"])
         }
         else
         {

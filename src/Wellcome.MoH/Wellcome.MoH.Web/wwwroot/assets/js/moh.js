@@ -124,10 +124,16 @@ function getReportPageHref(requiredIndex) {
         $select.change(function () {
             var newSearch = location.search.replace(/&?orderby=([^&]+)/g, ""); // throw away the orderby
             newSearch = newSearch.replace(/&?page=([^&]+)/g, ""); // throw away the paging
+            if(newSearch === "?") newSearch = "";
             var orderBy = $(this).find('option:selected').val();
-            if ('title' == orderBy) newSearch += '&orderby=title';
-            var newHref = location.href.replace(location.search, '') + newSearch;
-            location.href = newHref;
+            if ('title' === orderBy){
+                if(newSearch.indexOf("?") === -1){
+                    newSearch += "?orderby=title";
+                } else {
+                    newSearch += "&orderby=title";
+                }
+            }
+            location.href = location.href.replace(location.search, '') + newSearch;
         });
     });
 

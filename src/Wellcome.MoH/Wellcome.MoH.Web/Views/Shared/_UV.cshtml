@@ -1,0 +1,79 @@
+
+<style>
+    .alert {
+    background-image:none;
+    padding: 1.2em 1.2em 1.1em 1.1em;
+}
+</style>
+
+<div class="@ViewData["UVCssClass"]" style="height: 600px; clear:both;">
+
+    <div class="uv" id="uv"
+        data-locale="en-GB:English (GB)" 
+        data-config="/assets/config/uv-config-moh.json" 
+        data-uri="@ViewData["Manifest"]" 
+        data-canvasindex="@ViewData["CanvasIndex"]" 
+        style="width:100%; height:600px; background-color: #000">
+        <div class="alert" id="jsWarning">
+            <p>This page requires JavaScript</p>
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        
+        var warningElement = document.getElementById("jsWarning");
+        warningElement.parentNode.removeChild(warningElement);
+        updateHashFragsToUVCompatible();
+        document.write('<script id="embedUV" type="text/javascript" src="/spas/uv/uv-1.7.32/lib/embed.js">');
+        document.write('</' + 'script>');
+
+        function updateHashFragsToUVCompatible() {
+            var hash = document.location.hash;
+            if (!hash) return;
+
+            var manifest = 0;
+            var canvas = 0;
+            var highlight = null;
+            var zoom = null;
+
+            // results from encore and very old links
+            var originalPlayer = /([\d]+)\/([\d]+)(\/h=(.+))?/;
+            var match = originalPlayer.exec(hash);
+            if (match) {
+                manifest = match[1];
+                canvas = match[2];
+                if (match.length >= 4) {
+                    highlight = match[4];
+                }
+                setHash(manifest, canvas, highlight);
+                return;
+            }
+
+            // for existing player, assume params can be in any order - look for asi as evidence
+            if (hash.indexOf("asi=") > -1) {
+                manifest = getParameterByName("asi", hash);
+                canvas = getParameterByName("ai", hash);
+                highlight = getParameterByName("h", hash);
+                zoom = getParameterByName("z", hash);
+                setHash(manifest, canvas, highlight, zoom);
+            }
+
+        }
+
+        function getParameterByName(name, nvpairs) {
+            var match = RegExp('[?&]' + name + '=([^&]*)').exec(nvpairs);
+            return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+        }
+
+        function setHash(manifest, canvas, highlight, zoom) {
+            var parts = [];
+            if (manifest) parts.push("m=" + manifest);
+            if (canvas) parts.push("cv=" + canvas);
+            if (highlight) parts.push("h=" + highlight);
+            if (zoom) parts.push("z=" + zoom);
+            document.location.hash = "?" + parts.join("&");
+        }
+
+    </script>
+
+</div><!-- /.player -->

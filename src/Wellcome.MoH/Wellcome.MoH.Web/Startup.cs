@@ -62,8 +62,16 @@ namespace Wellcome.MoH.Web
                     pattern: "about-the-reports/{*detail}",
                     defaults: new {controller = "Home", action = "About"});
                 endpoints.MapControllerRoute(
+                    name: "browse-normalised",
+                    pattern: "browse-normalised/{normalisedPlace}",
+                    defaults: new {controller = "Home", action = "BrowseNormalised"});
+                endpoints.MapControllerRoute(
+                    name: "timeline",
+                    pattern: "timeline/{action=Index}",
+                    defaults: new {controller = "Timeline" });
+                endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{action=Index}/{id?}",
+                    pattern: "{action=Page}/{id?}/{page?}",
                     defaults: new {controller = "Home" });
             });
         }

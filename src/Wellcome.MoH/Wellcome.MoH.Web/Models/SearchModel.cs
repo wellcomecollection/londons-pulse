@@ -34,11 +34,16 @@ namespace Wellcome.MoH.Web.Models
 
         [FromQuery]
         public int PageSize { get; set; }
+        
+        [FromQuery]
+        public string OrderBy { get; set; }
 
         public ReportsResult ReportsResult { get; set; }
+        
         public Ordering Ordering { get; set; }
+        
 
-        public void SetDefaults()
+        public void SetDefaults(int pageSize)
         {
             if (EndYear < MinYear) EndYear = MaxYear;
             if (StartYear < MinYear) StartYear = MinYear;
@@ -50,7 +55,8 @@ namespace Wellcome.MoH.Web.Models
             }
 
             if (Page <= 0) Page = 1;
-            if (PageSize <= 0) PageSize = 50;
+            if (PageSize <= 0) PageSize = pageSize;
+            Ordering = OrderBy=="title" ? Ordering.DisplayName :  Ordering.Date;
         }
 
         public IEnumerable<int> GetYears()

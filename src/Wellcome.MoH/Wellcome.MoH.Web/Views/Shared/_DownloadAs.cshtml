@@ -1,0 +1,14 @@
+<!-- search-option-downloadas.html -->
+<fieldset class="site-search-option download-as" data-replace="download-as">
+    <input type="hidden" name="linkTemplate" id="linkTemplate" value="Download all ($format$)" />
+    <input type="hidden" name="dropTemplate" id="dropTemplate" value="tables as $format$" />
+    <label>Download all as:
+        <select>
+            <option value="@ViewData["ZipRoot"]&format=txt" data-format="txt" data-note="(with pipe as delimiter)">text</option>
+            <option value="@ViewData["ZipRoot"]&format=html" data-format="html">HTML</option>
+            <option value="@ViewData["ZipRoot"]&format=csv" data-format="csv">CSV</option>
+            <option value="@ViewData["ZipRoot"]&format=xml" data-format="xml">XML</option>
+        </select>
+    </label>
+    <input type="submit" value="Download"/>
+</fieldset>

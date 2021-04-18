@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Wellcome.MoH.Api;
 using Wellcome.MoH.Web.Models;
@@ -24,6 +23,151 @@ namespace Wellcome.MoH.Web.Controllers
             return View(new SearchModel());
         }
 
+        public IActionResult Search(SearchModel model)
+        {
+            model.SetDefaults(50);
+            if (!(string.IsNullOrEmpty(model.Terms) && string.IsNullOrEmpty(model.Place)))
+            {
+                model.ReportsResult = DoSearch(model);
+            }
+            if (model.ReportsResult != null && model.ReportsResult.HasResults)
+            {
+                SetDisplayCounts(model.Page, model.PageSize, model.ReportsResult.TotalVisibleResults);
+                var currentQueryString = Request.QueryString.ToString();
+                SetPagerHtml(currentQueryString, model.Page, model.PageSize, model.ReportsResult.TotalVisibleResults);
+
+                // Provide a URL for the table toggle - again, not very MVC
+                var rawQueryString = Regex.Replace(currentQueryString, "&tablesonly=(\\w+)", "", RegexOptions.IgnoreCase);
+                ViewData["TableToggleUrl"] = Request.Path + rawQueryString + (model.TablesOnly ? "" : "&tablesOnly=true");
+            }
+
+            model.ReportsResult ??= new ReportsResult();
+            return View(model);
+        }
+
+        private void SetPagerHtml(string currentQueryString, int page, int pageSize, int total)
+        {
+            // The following is not very MVC!
+            // It's a straight port of the wellcomelibrary.org pager control.
+            var pager = new StatelessPager();
+            ViewData["Pager"] = pager.GetHtml(
+                Request.Path,
+                page, pageSize, total,
+                "page", currentQueryString, true);
+        }
+
+        private ReportsResult DoSearch(SearchModel model)
+        {
+            const int visibleHitsPerReport = 5;
+            const int expandoThreshold = 2;
+            var reports = mohService.Search(
+                model.Place, 
+                model.StartYear, model.EndYear, 
+                model.Terms, 
+                model.Page, model.PageSize,
+                model.TablesOnly, 
+                true, true, 
+                visibleHitsPerReport, expandoThreshold);
+            return reports;
+        }
+
+        public IActionResult BrowseNormalised(string normalisedPlace, SearchModel model)
+        {
+            model.SetDefaults(20);
+            model.NormalisedPlace = normalisedPlace;
+            model.Place = null; // can't have both!
+            model.ReportsResult = mohService.BrowseNormalised(
+                model.NormalisedPlace, 
+                model.StartYear, model.EndYear, 
+                model.Page, model.PageSize, 
+                model.Ordering);
+
+            ViewData["ZipRoot"] = $"/zip?op={normalisedPlace}&useNormalisedPlace=true";
+            return BrowseView(model);
+        }
+        
+        public IActionResult Browse(SearchModel model)
+        {
+            model.SetDefaults(20);
+            model.NormalisedPlace = null; // can't have both!
+            model.ReportsResult = mohService.BrowseAnyPlace(
+                model.Place, 
+                model.StartYear, model.EndYear, 
+                model.Page, model.PageSize, 
+                model.Ordering);
+
+            ViewData["ZipRoot"] = $"/zip?op={model.Place}&startYear={model.StartYear}&endYear={model.EndYear}";
+            return BrowseView(model);
+        }
+        
+        public IActionResult BrowseView(SearchModel model)
+        {
+            if (model.ReportsResult.HasResults)
+            {
+                SetDisplayCounts(model.Page, model.PageSize, model.ReportsResult.TotalResults);
+            }
+
+            var currentQueryString = Request.QueryString.ToString();
+            SetPagerHtml(currentQueryString, model.Page, model.PageSize, model.ReportsResult.TotalResults);
+            return View("Browse", model);
+        }
+
+        public IActionResult Zip(ZipModel model)
+        {
+            return NotFound();
+        }
+        
+
+        private void SetDisplayCounts(int page, int pageSize, int total)
+        {
+            ViewData["FirstCount"] = (page - 1) * pageSize + 1;
+            int end = Math.Min(total, page * pageSize);
+            ViewData["LastCount"] = Math.Min(end, total);
+        }
+
+
+        public IActionResult Report(string id)
+        {
+            var normalisedBNumber = Utils.GetNormalisedBNumber(id, false);
+            if (id != normalisedBNumber)
+            {
+                return RedirectPermanent("/report/" + normalisedBNumber);
+            }
+
+            var report = mohService.GetReportWithAllTableSummaries(normalisedBNumber);
+            if (report == null)
+            {
+                return NotFound("Invalid B Number");
+            }
+            
+            ViewData["Manifest"] = $"{Constants.Manifest}{id}";
+            ViewData["CanvasIndex"] = 0;
+            ViewData["UVCssClass"] = "player";
+            ViewData["ZipRoot"] = $"/zip?op={normalisedBNumber}";
+            return View(report);
+        }
+        
+        public IActionResult Page(string id, int page)
+        {
+            // TODO
+            
+            ViewData["Manifest"] = $"{Constants.Manifest}{id}";
+            ViewData["CanvasIndex"] = page;
+            ViewData["UVCssClass"] = "player separator";
+            throw new NotImplementedException();
+        }
+        
+        public IActionResult About(string detail = null)
+        {
+            if (!string.IsNullOrWhiteSpace(detail))
+            {
+                return View(detail.Replace("/", ""));
+            }
+
+            return View();
+        }
+        
+        
         public IActionResult BuildSearch()
         {
             // This is not a very MVC way of doing things.
@@ -71,105 +215,6 @@ namespace Wellcome.MoH.Web.Controllers
             return Redirect(sb.ToString());
         }
 
-        public IActionResult Search(SearchModel model)
-        {
-            model.SetDefaults();
-            ReportsResult reports = null;
-            if (!(string.IsNullOrEmpty(model.Terms) && string.IsNullOrEmpty(model.Place)))
-            {
-                reports = DoSearch(model);
-            }
-            if (reports != null && reports.HasResults)
-            {
-                ViewData["FirstCount"] = (model.Page - 1) * model.PageSize + 1;
-                int end = Math.Min(reports.TotalResults, model.Page * model.PageSize);
-                ViewData["LastCount"] = Math.Min(end, reports.TotalVisibleResults);
-     
-                // The following is not very MVC!
-                // It's a straight port of the wellcomelibrary.org pager control.
-                var currentQueryString = Request.QueryString.ToString();
-                var pager = new StatelessPager();
-                ViewData["Pager"] = pager.GetHtml(
-                    Request.Path, 
-                    model.Page, model.PageSize, reports.TotalVisibleResults, 
-                    "page", currentQueryString, true);
-                
-                // Provide a URL for the table toggle - again, not very MVC
-                var rawQueryString = Regex.Replace(currentQueryString, "&tablesonly=(\\w+)", "", RegexOptions.IgnoreCase);
-                if (model.TablesOnly)
-                {
-                    ViewData["TableToggleUrl"] = Request.Path + rawQueryString;
-                }
-                else
-                {
-                    ViewData["TableToggleUrl"] = Request.Path + rawQueryString + "&tablesOnly=true";
-                }
-            }
-
-            model.ReportsResult = reports;
-            return View(model);
-        }
-
-        private ReportsResult DoSearch(SearchModel model)
-        {
-            const int visibleHitsPerReport = 5;
-            const int expandoThreshold = 2;
-            var reports = mohService.Search(
-                model.Place, 
-                model.StartYear, model.EndYear, 
-                model.Terms, 
-                model.Page, model.PageSize,
-                model.TablesOnly, 
-                true, true, 
-                visibleHitsPerReport, expandoThreshold);
-            return reports;
-        }
-
-        public IActionResult BrowseNormalised(string id, SearchModel model)
-        {
-            model.SetDefaults();
-            model.NormalisedPlace = id;
-            model.Place = null; // can't have both!
-            model.ReportsResult = mohService.BrowseNormalised(
-                model.NormalisedPlace, 
-                model.StartYear, model.EndYear, 
-                model.Page, model.PageSize, 
-                model.Ordering);
-            return View("Browse", model);
-        }
-
-        public IActionResult Browse(SearchModel model)
-        {
-            
-        }
-
-        public IActionResult Report(string id)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public IActionResult Page(string id, int index)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public IActionResult About(string detail = null)
-        {
-            if (string.IsNullOrWhiteSpace(detail))
-            {
-                return View();
-            }
-            var segment = detail.Split('/')[0];
-            return segment switch
-            {
-                "about-the-medical-officer-of-health-reports" => View("AboutTheMoHReports"),
-                "the-health-of-the-people" => View("TheHealthOfThePeople"),
-                "new-kind-of-medical-professional" => View("NewKindOfMedicalProfessional"),
-                "the-changing-face-of-london" => View("TheChangingFaceOfLondon"),
-                "using-the-report-data" => View("UsingTheReportData"),
-                _ => View()
-            };
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

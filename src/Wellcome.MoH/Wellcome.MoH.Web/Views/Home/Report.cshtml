@@ -1,0 +1,71 @@
+@using Wellcome.MoH.Api
+@model Report
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "View report tables";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+<section>
+<div class="section">
+    <div class="wrap">
+    <ul id="lvlyul" class="breadcrumb" role="navigation">
+        <li><a href="/moh/">Home</a></li>
+        <li>@Model.DisplayPlace @Model.Year</li>
+    </ul>
+    
+    <div class="group third">
+        <div class="column two-thirds">
+            <h2 id="MainContent_hTitle">@Model.DisplayPlace @Model.Year</h2>
+            <p><span id="MainContent_lblTitle">@Model.Title</span></p>
+        </div>
+        <div class="column">
+            <dl class="properties">
+                <dt>Published</dt>
+                <dd>@Model.PublicationYear</dd>
+                @if (!string.IsNullOrWhiteSpace(Model.Author))
+                {
+                    <dt>Author</dt>
+                    <dd>@Model.Author</dd>
+                }
+                <dt>Pages</dt>
+                <dd>@Model.PageCount</dd>
+                <dt>Tables</dt>
+                <dd>@Model.TableCount</dd>
+            </dl>
+        </div>
+    </div><!--/.group-->
+    
+    <partial name="../Shared/_UV.cshtml" />
+        
+    <div class="group site-search-options">
+        <h3 class="float-left"><strong>@Model.TableCount</strong> tables in this report</h3>
+        <partial name="../Shared/_DownloadAs.cshtml" />
+    </div>
+        
+    <ul class="site-search-results">
+        @foreach (var tableSummary in Model.TableSummaries)
+        {        
+            <li class="result">
+                <h5>
+                    <a href="@Model.BNumber/@tableSummary.PageIndex#?c=0&m=0&s=0&cv=@tableSummary.PageIndex"
+                       class="result-type-table">Page @tableSummary.OrderLabel</a>
+                </h5>
+                <div class="excerpt">
+                    <h6 class="table-caption">@Utils.GetCaption(tableSummary.Caption)</h6>
+                    <div class="table-content moh-table-container">
+                        <table>
+                            @Html.Raw(tableSummary.HeaderSummary)
+                        </table>
+                    </div>
+                </div>
+            </li><!-- /.result -->
+        }
+    </ul>
+    
+    </div><!-- /.wrap -->
+</div><!-- /.section -->
+</section>    
+    
+
