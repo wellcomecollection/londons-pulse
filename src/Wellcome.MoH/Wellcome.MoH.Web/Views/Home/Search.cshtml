@@ -12,7 +12,7 @@
     <div class="wrap">
         
         <ul id="lvlyul" class="breadcrumb" role="navigation">
-            <li><a href="/">Home</a></li>
+            <li><a href="/moh/">Home</a></li>
             <li>Search reports</li>
         </ul>
     
@@ -56,9 +56,7 @@
                         <div class="group fixed-left">
                             <div class="fixed-column">
                                 <h4 class="result-title">
-                                    <a asp-controller="Home" asp-action="Report" asp-route-id="@report.BNumber">
-                                        @report.DisplayPlace @report.Year
-                                    </a>
+                                    <a href="/moh/report/@report.BNumber">@report.DisplayPlace @report.Year</a>
                                 </h4>
                                 <img src="@report.Thumbnail" alt="Cover page of @report.BNumber"/>
                             </div>
@@ -80,7 +78,7 @@
                                         if (hit is TableSummary tableSummary)
                                         {
                                             <h5>
-                                                <a href="/report/@report.BNumber/@hit.PageIndex#?asi=0&ai=@hit.PageIndex"
+                                                <a href="/moh/report/@report.BNumber/@hit.PageIndex#?asi=0&ai=@hit.PageIndex"
                                                    class="result-type-table">Table on page @tableSummary.OrderLabel</a>
                                             </h5>
                                             <div class="excerpt">
@@ -95,7 +93,7 @@
                                         else if (hit is TextHit textHit)
                                         {
                                             <h5>
-                                                <a href="/report/@report.BNumber/@hit.PageIndex#?asi=0&ai=@hit.PageIndex"
+                                                <a href="/moh/report/@report.BNumber/@hit.PageIndex#?asi=0&ai=@hit.PageIndex"
                                                    class="result-type-text">Text on page @textHit.OrderLabel</a>
                                             </h5>
                                             <div class="excerpt">

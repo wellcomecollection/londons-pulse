@@ -1,0 +1,123 @@
+@using Wellcome.MoH.Api
+@model Page
+
+@{
+    ViewData["Title"] = Model.Report.Title + " page " + Model.OrderLabel;
+    ViewData["Description"] = "Medical Officer of Health reports give statistical data about births, deaths and diseases, as well as information on local communities and daily life.";
+    ViewData["h1"] = "View report page";
+    ViewData["h2"] = Constants.SiteTitle;
+}
+
+<section>
+<div class="section">
+    <div class="wrap moh-table-container">
+        <ul id="lvlyul" class="breadcrumb" role="navigation">
+            <li><a href="/moh/">Home</a></li>
+            <li><a href="/moh/report/@Model.Report.BNumber">@Model.Report.DisplayPlace @Model.Report.Year</a></li>
+            <li>Page @Model.OrderLabel</li>
+        </ul>
+    
+        <h2>@Model.Report.DisplayPlace @Model.Report.Year</h2>
+        <ul class="prev-next-nav float-right" style="display:none;">
+            @if (Model.Index == 0)
+            {
+                <li><a rel="prev"><span>&larr;</span> Previous<br/>page</a></li>
+            }
+            else
+            {
+                <li><a href="/moh/report/@Model.Report.BNumber/@(Model.Index - 1)#?asi=0&ai=@(Model.Index - 1)" rel="prev"><span>&larr;</span> Previous<br/>page</a></li>
+            }
+            @if (Model.Index == Model.Report.PageCount - 1)
+            {
+                <li><a rel="next"><span>&rarr;</span> Next<br/>page</a></li>
+            }
+            else
+            {
+                <li><a href="/moh/report/@Model.Report.BNumber/@(Model.Index + 1)#?asi=0&ai=@(Model.Index + 1)" rel="next"><span>&rarr;</span> Next<br/>page</a></li>
+            }
+        </ul>
+        <p>@Model.Report.Title</p>
+
+        <partial name="../Shared/_UV.cshtml" />
+
+            
+        <div id="page-data-container">
+            <div id="page-data">
+                
+                @{
+                    // assume not nested, chunks don't overlap
+                    int pos = 0;
+                    int counter = 0;
+                    foreach (var table in Model.Tables.Where(t => t.RawTextStart >= 0))
+                    {
+                        // add the chunk before the table
+                        var plainText = Model.RawText.Substring(pos, table.RawTextStart - pos);
+                        await TextSegment(plainText, counter++);
+                        await TableSegment(table); 
+                        // move the position beyond the table
+                        pos = table.RawTextEnd; // + 1 ?
+                    }
+                    var lastBit = Model.RawText.Substring(pos);
+                    await TextSegment(lastBit, counter);
+                    foreach (var table in Model.Tables.Where(t => t.RawTextStart == -1))
+                    {
+                        await TableSegment(table);
+                    }
+                }
+
+                <input type="hidden" name="linkTemplate" id="linkTemplate" value="Download ($format$)"/>
+                <input type="hidden" name="dropTemplate" id="dropTemplate" value="Download ($format$)"/>
+
+            </div>
+        </div>
+    </div><!-- /.wrap -->
+</div><!-- /.section -->
+</section>    
+
+@{
+    // these markup methods on ASP.NET Core 3 are nice
+    
+    async Task TextSegment(string plainText, int textCounter)
+    {
+        if (!string.IsNullOrWhiteSpace(plainText) && !Utils.IsJustPageNumber(plainText))
+        {
+            var paragraphId = "text_para" + textCounter;
+            plainText = Utils.AddBreakTags(plainText);
+            <div class="group separator site-search-options">
+                <h3 class="float-left result-type-text">Text</h3>
+                <div class="float-right site-search-option">
+                    <a href="#" class="option-button copy-to-clipboard" data-copysrc="#@paragraphId">Copy text to clipboard</a>
+                </div>
+            </div>
+
+            <div class="group third">
+                <div class="excerpt">
+                    <p id="@paragraphId">@Html.Raw(plainText)</p>
+                </div><!--/ .column.two-thirds -->
+            </div><!--/ .group -->
+        }
+    }
+    
+    
+    async Task TableSegment(Table table)
+    {
+        var a = 1; // remove this and Rider doesn't like the markup!
+        <div class="group separator site-search-options track-link">
+            <h3 class="float-left result-type-table">Table: <strong>@Utils.TextOnly(table.Caption)</strong></h3>
+            <fieldset class="site-search-option download-as" data-replace="download-as">
+                <label>Download table as:
+                    <select>
+                        <option value="/moh/service/tables/@(table.Id).txt" data-format="txt" data-note="(with pipe as delimiter)">text</option>
+                        <option value="/moh/service/tables/@(table.Id).html" data-format="html">HTML</option>
+                        <option value="/moh/service/tables/@(table.Id).csv" data-format="csv">CSV</option>
+                        <option value="/moh/service/tables/@(table.Id).xml" data-format="xml">XML</option>
+                    </select>
+                </label>
+                <input type="submit" value="Download"/>
+            </fieldset>
+        </div>
+
+        @Html.Raw(Utils.StripObjectIdAndLabel(table.Html))
+    }
+}
+    

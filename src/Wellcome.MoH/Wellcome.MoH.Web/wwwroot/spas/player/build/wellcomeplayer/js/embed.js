@@ -182,7 +182,7 @@ docReady(function() {
 
         // replace legacy url (wellcome branch only)
         if (scriptUri.indexOf('/plugins/wellcome/embed.js') !== -1){
-            absScriptUri = scriptUri = 'http://iiif.wellcomecollection.org/spas/player/build/wellcomeplayer/js/embed.js';
+            absScriptUri = scriptUri = 'https://iiif.wellcomecollection.org/spas/player/build/wellcomeplayer/js/embed.js';
         }
 
         // get the part preceding 'js/embed.js'

@@ -139,6 +139,7 @@ function getReportPageHref(requiredIndex) {
 
     // Download As
     initialiseDownloadAs();
+    initialiseCopyToClipboard();
 })();
 
 // Range Slider
@@ -349,6 +350,7 @@ var place_names = [
     "Friern Barnet",
     "Fulham",
     "Fulham (Metropolitan Borough)",
+    "Gray's Inn",
     "Greenford",
     "Greenwich",
     "Hackney",
@@ -381,6 +383,7 @@ var place_names = [
     "Kensington (Metropolitan Borough)",
     "Kensington and Chelsea",
     "Kidbrook",
+    "Kingsbury",
     "Kingston",
     "Kingston upon Thames",
     "Lambeth",
@@ -402,6 +405,7 @@ var place_names = [
     "Newham",
     "Newington",
     "Orpington",
+    "Orsett",
     "Paddington",
     "Paddington (Metropolitan Borough)",
     "Penge",
@@ -463,6 +467,7 @@ var place_names = [
     "Wanstead",
     "Wanstead and Woodford",
     "Wapping",
+    "Wealdstone",
     "Wembley",
     "West Ham",
     "Westminster",
@@ -477,47 +482,39 @@ var place_names = [
 ];
 
 (function () {
-    var pn = null;
-    if(!window.libraryAuthRealm)
-    {
-        pn = place_names;
-        var data = [];
-        for (var i = 0; i < pn.length; i++) {
-            data.push({ id: pn[i], text: pn[i] });
-        }
-        $("#location").select2({
-            allowClear: true,
-            placeholder: "Choose a location",
-            width: 'resolve',
-            data: data,
-            formatNoMatches: function () { return "No exact matches.<br/> Try your search in first search box."; }
-        });
-        $('.select2-search-choice-close').append('<span class="clear-select2 clear" style="display: block;">✕</span>');
+    var data = [];
+    for (var i = 0; i < place_names.length; i++) {
+        data.push({ id: place_names[i], text: place_names[i] });
     }
-    if (location.pathname.indexOf('/moh/') != -1) {
-        $.get('/service/moh/normalisedmohplacenames', function (returned) {
-                pn = $.parseJSON(returned);
-            })
-            .fail(function () {
-                pn = place_names;
-            })
-            .always(function () {
-                var data = [];
-                for (var i = 0; i < pn.length; i++) {
-                    data.push({ id: pn[i], text: pn[i] });
-                }
-                $("#location").select2({
-                    allowClear: true,
-                    placeholder: "Choose a location",
-                    width: 'resolve',
-                    data: data,
-                    formatNoMatches: function () { return "No exact matches.<br/> Try your search in first search box."; }
-                });
-                $('.select2-search-choice-close').append('<span class="clear-select2 clear" style="display: block;">✕</span>');
-            });
-    }
+    $("#location").select2({
+        allowClear: true,
+        placeholder: "Choose a location",
+        width: 'resolve',
+        data: data,
+        formatNoMatches: function () { return "No exact matches.<br/> Try your search in first search box."; }
+    });
+    $('.select2-search-choice-close').append('<span class="clear-select2 clear" style="display: block;">✕</span>');
 })();
 
+function initialiseCopyToClipboard() {
+    if(navigator.clipboard){
+        var $clipLinks = $('a.copy-to-clipboard');
+        $clipLinks.show();
+        $clipLinks.on('click', function (ev){
+            ev.preventDefault();
+            var $link = $(this);
+            var $target = $($(this).attr('data-copysrc'));
+            var content = $target.html();
+            navigator.clipboard.writeText(content).then(function() {
+                // give some visual feedback that the copy has happened.
+                $link.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
+                $target.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
+            }, function(err) {
+                console.error('Async: Could not copy to clipboard: ', err);
+            });
+        });        
+    }
+}
 
 function initialiseDownloadAs() {
     $('[data-replace="download-as"]').each(function () {
@@ -589,55 +586,6 @@ function initialiseDownloadAs() {
 }
 
 
-function initialiseCopyToClipboard() {
-    // Copy to clipboard
-    $('.copy-to-clipboard').each(function () {
-        var copysrc = $(this).attr('data-copysrc');
-        // console.log(copysrc);
-
-        $(this).zclip({
-            path: '/assets/js/ZeroClipboard.swf',
-            copy: $(copysrc).text(),
-            afterCopy: function () {
-                $(copysrc).highlight();
-                //                var el = $(copysrc);
-                //                el.before("<div/>");
-                //                el.prev()
-                //                .width(el.width())
-                //                .height(el.height())
-                //                .css({
-                //                    "position": "absolute",
-                //                    "background-color": "#ffff99",
-                //                    "opacity": ".25"
-                //                })
-                //                .fadeOut(2000);
-            }
-        });
-    });
-}
-
-
-function initialiseCopyToClipboardClick() {
-    $('.copy-to-clipboard').click(function () {
-        var el = $(this);
-        var copysrc = el.attr('data-copysrc');
-        var elEv = [];
-        elEv.value = 0, elEv.non_i = false;
-        elEv.category = "Copy to Clipboard";
-        elEv.label = location.pathname + copysrc;
-        elEv.loc = location.href;
-        elEv.action = "Copy MoH Text";
-        pushTrackEvent(elEv);
-    });
-}
-
-
-$(document).ready(function () {
-    initialiseCopyToClipboard();
-    initialiseCopyToClipboardClick();
-});
-
-
 $(document).bind("uv.onCanvasIndexChanged", function (eventObj, index) {
     if (index != document.currentPlayerAssetIndex) {
         document.currentPlayerAssetIndex = index;
@@ -668,7 +616,6 @@ $(document).bind("uv.onCanvasIndexChanged", function (eventObj, index) {
                 currentHref = currentHref.substr(0, currentHref.lastIndexOf('/'));
             }
             var navigateTo = currentHref + '/' + index + hash;
-            //alert("onAssetIndexChanged: setting href to " + navigateTo);
             if (window.event) {
                 window.event.returnValue = false;
             }
@@ -679,11 +626,8 @@ $(document).bind("uv.onCanvasIndexChanged", function (eventObj, index) {
             var requiredPage = getReportPageHref(index);
             $("#lvlyul").load(requiredPage + " #lvlyul li");
             $("#page-data-container").load(requiredPage + " #page-data", function () {
-                initialiseCopyToClipboard();
-                initialiseCopyToClipboardClick();
                 initialiseDownloadAs();
-                //$("#lvlyul").highlight();
-                //$("#page-data-container").highlight();
+                initialiseCopyToClipboard();
             });
         }
     }
@@ -696,55 +640,3 @@ $(document).bind("seadragonExtension.onSearch", function (eventObj, terms) {
 });
 
 
-// bespoke "Peckham Problem" autocomplete
-
-//var typewatch = (function () {
-//    var timer = 0;
-//    return function(callback, ms) {
-//        clearTimeout(timer);
-//        timer = setTimeout(callback, ms);
-//    };
-//})();
-//
-//var lastCalledQuery = "";
-
-//window.placeNamesFromServer = null;
-
-//$(document).ready(function () {
-
-//    var pn = null;
-//    if (location.pathname.indexOf('/moh/') != -1) {
-//        $.get('/service/moh/normalisedmohplacenames', function (returned) {
-//            window.placeNamesFromServer = $.parseJSON(returned);
-//        })
-//    .fail(function () {
-//        window.placeNamesFromServer = place_names;
-//    })
-//    .always(function () {
-//        $('#location').keyup(function () {
-//            typewatch(function () {
-//                // executed only 300 ms after the last keyup event.
-//                checkForMoHPlaces();
-//            }, 300);
-//        });
-//    });
-//    }
-
-
-
-//    $('#aspnetForm').submit(function(e) {
-//        e.preventDefault();
-//    });
-
-//    // if the user has clicked the back button
-//    checkForMoHPlaces();
-//});
-
-//function checkForMoHPlaces() {
-//    var qVal = $('#location').val();
-//    //alert(qVal);
-//    if (qVal && qVal.length >= 3 && qVal != lastCalledQuery) {
-//        lastCalledQuery = qVal;
-//        alert("is " + qVal + " in this list?\r\n\r\n" + window.placeNamesFromServer);
-//    }
-//}

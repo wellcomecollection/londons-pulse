@@ -126,15 +126,9 @@ namespace Wellcome.MoH.Web.Controllers
         }
 
 
-        public IActionResult Report(string id)
+        private IActionResult ReportInternal(string id)
         {
-            var normalisedBNumber = Utils.GetNormalisedBNumber(id, false);
-            if (id != normalisedBNumber)
-            {
-                return RedirectPermanent("/report/" + normalisedBNumber);
-            }
-
-            var report = mohService.GetReportWithAllTableSummaries(normalisedBNumber);
+            var report = mohService.GetReportWithAllTableSummaries(id);
             if (report == null)
             {
                 return NotFound("Invalid B Number");
@@ -143,18 +137,35 @@ namespace Wellcome.MoH.Web.Controllers
             ViewData["Manifest"] = $"{Constants.Manifest}{id}";
             ViewData["CanvasIndex"] = 0;
             ViewData["UVCssClass"] = "player";
-            ViewData["ZipRoot"] = $"/zip?op={normalisedBNumber}";
+            ViewData["ZipRoot"] = $"/zip?op={id}";
             return View(report);
         }
         
-        public IActionResult Page(string id, int page)
+        public IActionResult Report(string id, int page = -1)
         {
-            // TODO
+            // make a canonical URL
+            var normalisedBNumber = Utils.GetNormalisedBNumber(id, false);
+            if (id != normalisedBNumber)
+            {
+                var normalisedUrl = $"/moh/report/{normalisedBNumber}";
+                if (page >= 0) normalisedUrl += $"/{page}";
+                return RedirectPermanent(normalisedUrl);
+            }
             
+            if (page == -1)
+            {
+                return ReportInternal(id);
+            }
+
+            var reportPage = mohService.GetPage(id, page);
+            if (reportPage == null)
+            {
+                return NotFound("Invalid B Number or page number");
+            }
             ViewData["Manifest"] = $"{Constants.Manifest}{id}";
             ViewData["CanvasIndex"] = page;
             ViewData["UVCssClass"] = "player separator";
-            throw new NotImplementedException();
+            return View("Page", reportPage);
         }
         
         public IActionResult About(string detail = null)
@@ -178,7 +189,7 @@ namespace Wellcome.MoH.Web.Controllers
             int endYear = Utils.GetIntValue(Request.Form["year-to"], -1);
             string orderby = Request.Form["orderby"];
 
-            var sb = new StringBuilder("/");
+            var sb = new StringBuilder("/moh/");
             bool first = true;
             if (!string.IsNullOrWhiteSpace(terms))
             {

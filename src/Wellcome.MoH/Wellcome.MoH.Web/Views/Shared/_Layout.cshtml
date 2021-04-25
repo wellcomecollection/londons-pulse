@@ -36,6 +36,9 @@
         {
             text-transform: none;
         }
+        a.copy-to-clipboard {
+            display: none;
+        }
     </style>
     <script>
         document.getElementsByTagName('html')[0].className += ' has-js';
@@ -91,7 +94,7 @@
                     </li>
                 </ul>
                 <div class="site-title reduced">
-                    <a href="/">
+                    <a href="/moh/">
                         <img id="wlReducedLogo" src="/assets/img/wellcome-logo.png" alt="wellcome library">
                     </a>
                 </div><!-- /.site-title -->
@@ -108,7 +111,7 @@
 
                         <div class="">
                             <!-- /.fixed-column -->
-                            <div class="group fluid-full" style="background-image: url(/assets/img/moh-heading.png)">
+                            <div class="group fluid-full" style="background-image: url(/moh/img/moh-heading.png)">
                                 <div class="page-title no-artifact">
                                     @if (ViewData["h2"] != null)
                                     {
@@ -132,16 +135,16 @@
 
                     <ul class="main-nav" role="navigation">
                         <li>
-                            <navlink href="/">Home</navlink>
+                            <navlink href="/moh/">Home</navlink>
                         </li>
                         <li>
-                            <navlink href="/search/">Search The Reports</navlink>
+                            <navlink href="/moh/search/">Search The Reports</navlink>
                         </li>
                         <li>
-                            <navlink href="/about-the-reports/">About The Reports</navlink>
+                            <navlink href="/moh/about-the-reports/">About The Reports</navlink>
                         </li>
                         <li>
-                            <navlink href="/timeline/">Health of London Timeline</navlink>
+                            <navlink href="/moh/timeline/">Health of London Timeline</navlink>
                         </li>
                     </ul>
 
@@ -249,7 +252,7 @@
                         <p>
                             <small>The Wellcome Library is part of the <strong>Wellcome Trust</strong></small>
                         </p>
-                        <a href="http://www.wellcome.ac.uk/" title="Visit the Wellcome Trust">
+                        <a href="https://wellcomecollection.org/" title="Visit the Wellcome Trust">
                             <img src="/assets/img/wellcome-trust-logo.png" alt="Wellcome Trust">
                         </a>
                     </div><!-- /.column -->
