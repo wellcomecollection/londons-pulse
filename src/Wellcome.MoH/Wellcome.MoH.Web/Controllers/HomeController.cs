@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Wellcome.MoH.Api;
+using Wellcome.MoH.Api.Library;
 using Wellcome.MoH.Web.Models;
 
 namespace Wellcome.MoH.Web.Controllers
@@ -144,7 +145,7 @@ namespace Wellcome.MoH.Web.Controllers
         public IActionResult Report(string id, int page = -1)
         {
             // make a canonical URL
-            var normalisedBNumber = Utils.GetNormalisedBNumber(id, false);
+            var normalisedBNumber = WellcomeLibraryIdentifiers.GetNormalisedBNumber(id, false);
             if (id != normalisedBNumber)
             {
                 var normalisedUrl = $"/moh/report/{normalisedBNumber}";
