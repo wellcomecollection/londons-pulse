@@ -20,19 +20,17 @@ namespace Wellcome.MoH.Repository.SqlServer.Core
             string filePath,
             string errorMessage, string stackTrace, long tableId)
         {
-            var err = ctx.ReportParseErrors.Create();
-            err.ShortBNumber = shortBNumber;
-            err.BNumber = bNumber;
-            err.DirectoryPath = directoryPath;
-            err.FilePath = filePath;
-            err.Message = errorMessage;
-            err.StackTrace = stackTrace;
-            err.TableId = tableId;
-            err.Recorded = DateTime.Now;
-            //if (stackTrace != null)
-            //{
-            //    err.StackTrace = String.Join("\r\n", stackTrace);
-            //}
+            var err = new ReportParseError
+            {
+                ShortBNumber = shortBNumber,
+                BNumber = bNumber,
+                DirectoryPath = directoryPath,
+                FilePath = filePath,
+                Message = errorMessage,
+                StackTrace = stackTrace,
+                TableId = tableId,
+                Recorded = DateTime.Now
+            };
             ctx.ReportParseErrors.Add(err);
             ctx.SaveChanges();
         }

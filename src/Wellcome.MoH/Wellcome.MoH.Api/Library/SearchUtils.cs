@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Iveonik.Stemmers;
+using PluralizeService.Core;
 using Wellcome.MoH.Web.Models;
 
 namespace Wellcome.MoH.Api.Library
@@ -11,7 +12,6 @@ namespace Wellcome.MoH.Api.Library
     public static class SearchUtils
     {
         private static IStemmer _stemmer;
-        private static PluralizationService _pluralizationService;
 
         public static string GetExtract(string hitText, string terms, int size, string beforeHighlight, string afterHighlight)
         {
@@ -106,12 +106,16 @@ namespace Wellcome.MoH.Api.Library
 
         public static string StemAndClean(string s)
         {
+            // NB: The PluralizationService is not available in .NET Core.
+            // https://docs.microsoft.com/en-us/dotnet/api/system.data.entity.design.pluralizationservices.pluralizationservice.isplural?view=netframework-4.8&viewFallbackFrom=netcore-3.1
+            // It would be nice to use this:
+            // https://github.com/Humanizr/Humanizer
+            // but I'm going to use this for maximum similarity:
+            // https://github.com/kanisimoff/PluralizeService.Core
             if (_stemmer == null) _stemmer = new EnglishStemmer();
-            if (_pluralizationService == null)
-                _pluralizationService = PluralizationService.CreateService(new CultureInfo("en-GB"));
             var stemmed = _stemmer.Stem(s.TrimNonAlphaNumeric());
-            if (_pluralizationService.IsPlural(stemmed))
-                stemmed = _pluralizationService.Singularize(stemmed);
+            if (PluralizationProvider.IsPlural(stemmed))
+                stemmed = PluralizationProvider.Singularize(stemmed);
             return stemmed;
         }
 

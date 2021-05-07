@@ -89,6 +89,39 @@ namespace Wellcome.MoH.Web.Models
         }
         
         /// <summary>
+        /// remove leading and trailing characters that are not alphanumeric
+        /// TODO - imporve this, not very efficient
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string TrimNonAlphaNumeric(this string s)
+        {
+            var sb = new StringBuilder();
+            bool inAlphas = false;
+            foreach (char c in s)
+            {
+                if (inAlphas || Char.IsLetterOrDigit(c))
+                {
+                    sb.Append(c);
+                    inAlphas = true;
+                }
+            }
+            // we now have a string with alphas on the end
+            var sr = sb.ToString().Reverse();
+            var sbr = new StringBuilder();
+            foreach (char c in sr)
+            {
+                if (Char.IsLetterOrDigit(c))
+                {
+                    sbr.Append(c);
+                }
+            }
+            var array = sbr.ToString().ToCharArray();
+            Array.Reverse(array);
+            return new String(array);
+        }
+        
+        /// <summary>
         /// Takes a plain string (i.e., not HTML) and inserts break tags
         /// at every new line, so that the line breaks appear when the text is rendered in the browser.
         /// 

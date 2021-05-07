@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using Utils;
 
 namespace Wellcome.MoH.Api.Library
 {

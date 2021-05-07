@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using Amazon.S3;
+using Amazon.S3.Model;
 using Microsoft.Extensions.Logging;
 using Wellcome.MoH.Api;
 using Wellcome.MoH.Api.Library;
@@ -19,13 +23,20 @@ namespace Wellcome.MoH.Repository
     {
         // private const string ThumbTemplate = "/thumbs/{0}/{1}/{2}.jpg";
         private static readonly string ThumbTemplate = "https://iiif.wellcomecollection.org/thumb/{0}";
-        public static readonly List<Tuple<int, int>> DateRangePairs;
+        private static readonly List<Tuple<int, int>> DateRangePairs;
 
         private readonly ILogger<MoHService> logger;
+        private readonly MoHContext mohContext;
+        private readonly IAmazonS3 amazonS3;
 
-        public MoHService(ILogger<MoHService> logger)
+        public MoHService(
+            ILogger<MoHService> logger,
+            MoHContext mohContext,
+            IAmazonS3 amazonS3)
         {
             this.logger = logger;
+            this.mohContext = mohContext;
+            this.amazonS3 = amazonS3;
         }
 
         static MoHService()
@@ -49,33 +60,24 @@ namespace Wellcome.MoH.Repository
 
         public string[] GetNormalisedNames()
         {
-            using (var ctx = new MoHContext())
-            {
-                // TODO: check that EF actually executes the sensible query here
-                var names = ctx.MoHReports.Select(r => r.NormalisedPlace).Distinct().ToList();
-                names.Sort();
-                return names.Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
-            }
+            // TODO: check that EF actually executes the sensible query here
+            var names = mohContext.MoHReports.Select(r => r.NormalisedPlace).Distinct().ToList();
+            names.Sort();
+            return names.Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
         }
 
         public string[] GetNormalisedMoHPlaceNames()
         {
-            using (var ctx = new MoHContext())
-            {
-                var names = ctx.PlaceMappings.Select(pm => pm.NormalisedMoHPlace).Distinct().ToList();
-                names.Sort();
-                return names.Where(n => !string.IsNullOrWhiteSpace(n) && !n.StartsWith("(unset")).ToArray();
-            }
+            var names = mohContext.PlaceMappings.Select(pm => pm.NormalisedMoHPlace).Distinct().ToList();
+            names.Sort();
+            return names.Where(n => !string.IsNullOrWhiteSpace(n) && !n.StartsWith("(unset")).ToArray();
         }
 
         public string[] GetAllPlaceNames()
         {
-            using (var ctx = new MoHContext())
-            {
-                var names = ctx.PlaceMappings.Select(pm => pm.MoHPlace).Distinct().ToList();
-                names.Sort();
-                return names.Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
-            }
+            var names = mohContext.PlaceMappings.Select(pm => pm.MoHPlace).Distinct().ToList();
+            names.Sort();
+            return names.Where(n => !string.IsNullOrWhiteSpace(n)).ToArray();
         }
 
         public string[] AutoCompletePlace(string fragment)
@@ -83,43 +85,38 @@ namespace Wellcome.MoH.Repository
             throw new NotImplementedException();
         }
 
-        public ReportsResult BrowseNormalised(string normalisedPlace, int startYear, int endYear, int page, int pageSize, Ordering ordering)
+        public ReportsResult BrowseNormalised(string normalisedPlace, int startYear, int endYear, int page,
+            int pageSize, Ordering ordering)
         {
-            using (var ctx = new MoHContext())
-            {
-                var reports = ctx.MoHReports.Where(r =>
-                            r.NormalisedPlace == normalisedPlace && 
-                            r.Year >= startYear && 
-                            r.Year <= endYear &&
-                            r.PageCount > 0);
-                var results = PagedBrowseReports(reports, page, pageSize, ordering);
-                results.PreCanned = true;
-                return results;
-            }
+            var reports = mohContext.MoHReports.Where(r =>
+                r.NormalisedPlace == normalisedPlace &&
+                r.Year >= startYear &&
+                r.Year <= endYear &&
+                r.PageCount > 0);
+            var results = PagedBrowseReports(reports, page, pageSize, ordering);
+            results.PreCanned = true;
+            return results;
         }
 
 
         public ReportsResult BrowseAnyPlace(string anyPlace, int startYear, int endYear, int page, int pageSize, Ordering ordering)
         {
-            using (var ctx = new MoHContext())
+            var reports = mohContext.MoHReports.Where(r => 
+                r.Year >= startYear &&
+                r.Year <= endYear &&
+                r.PageCount > 0);
+            bool preCanned = false;
+            if (!string.IsNullOrWhiteSpace(anyPlace))
             {
-                var reports = ctx.MoHReports.Where(r => 
-                    r.Year >= startYear &&
-                    r.Year <= endYear &&
-                    r.PageCount > 0);
-                bool preCanned = false;
-                if (!string.IsNullOrWhiteSpace(anyPlace))
-                {
-                    reports = reports.Where(r => r.PlaceMappings.Any(pm => pm.NormalisedMoHPlace == anyPlace));
-                }
-                else if (IsKnownDateRange(startYear, endYear))
-                {
-                    preCanned = true;
-                }
-                var results = PagedBrowseReports(reports, page, pageSize, ordering);
-                results.PreCanned = preCanned;
-                return results;
+                reports = reports.Where(r => r.PlaceMappings.Any(pm => pm.NormalisedMoHPlace == anyPlace));
             }
+            else if (IsKnownDateRange(startYear, endYear))
+            {
+                preCanned = true;
+            }
+            var results = PagedBrowseReports(reports, page, pageSize, ordering);
+            results.PreCanned = preCanned;
+            return results;
         }
 
         private ReportsResult PagedBrowseReports(IQueryable<MoHReport> reports, int page, int pageSize, Ordering ordering)
@@ -173,18 +170,15 @@ namespace Wellcome.MoH.Repository
         public Report GetReportWithAllTableSummaries(string bNumber)
         {
             var bnum = bNumber.ToShortBNumber();
-            using (var ctx = new MoHContext())
+            var dbRreport = mohContext.MoHReports.SingleOrDefault(r => r.ShortBNumber == bnum);
+            if (dbRreport == null)
             {
-                var dbRreport = ctx.MoHReports.SingleOrDefault(r => r.ShortBNumber == bnum);
-                if (dbRreport == null)
-                {
-                    return null;
-                }
-                var report = GetBrowseReport(dbRreport);
-                var dbTables = ctx.ReportTables.Where(t => t.ShortBNumber == bnum);
-                report.TableSummaries = dbTables.OrderBy(t => t.Id).Select(GetTableSummary).ToArray();
-                return report;
+                return null;
             }
+            var report = GetBrowseReport(dbRreport);
+            var dbTables = mohContext.ReportTables.Where(t => t.ShortBNumber == bnum);
+            report.TableSummaries = dbTables.OrderBy(t => t.Id).Select(GetTableSummary).ToArray();
+            return report;
         }
 
         private TableSummary GetTableSummary(ReportTable reportTable)
@@ -226,16 +220,13 @@ namespace Wellcome.MoH.Repository
         public Page GetPage(string bNumber, int imageIndex)
         {
             var bnum = bNumber.ToShortBNumber();
-            using (var ctx = new MoHContext())
-            {
-                var dbPage = ctx.ReportPages.Single(p => p.ShortBNumber == bnum && p.ImageIndex == imageIndex);
-                var page = GetBrowsePage(dbPage);
-                var dbRreport = ctx.MoHReports.Single(r => r.ShortBNumber == bnum);
-                page.Report = GetBrowseReport(dbRreport);
-                var dbTables = ctx.ReportTables.Where(t => t.ShortBNumber == bnum && t.ImageIndex == imageIndex);
-                page.Tables = dbTables.OrderBy(t => t.TableIndex).Select(GetBrowseTable).ToArray();
-                return page;
-            }
+            var dbPage = mohContext.ReportPages.Single(p => p.ShortBNumber == bnum && p.ImageIndex == imageIndex);
+            var page = GetBrowsePage(dbPage);
+            var dbRreport = mohContext.MoHReports.Single(r => r.ShortBNumber == bnum);
+            page.Report = GetBrowseReport(dbRreport);
+            var dbTables = mohContext.ReportTables.Where(t => t.ShortBNumber == bnum && t.ImageIndex == imageIndex);
+            page.Tables = dbTables.OrderBy(t => t.TableIndex).Select(GetBrowseTable).ToArray();
+            return page;
         }
 
         private Table GetBrowseTable(ReportTable reportTable)
@@ -277,19 +268,16 @@ namespace Wellcome.MoH.Repository
 
         public string GetTableText(long tableId, string fileExt)
         {
-            using (var ctx = new MoHContext())
+            switch (fileExt.ToLowerInvariant())
             {
-                switch (fileExt.ToLowerInvariant())
-                {
-                    case "html":
-                        return ctx.ReportTables.Single(t => t.Id == tableId).Html;
-                    case "xml":
-                        return ctx.ReportTables.Single(t => t.Id == tableId).Xml;
-                    case "csv":
-                        return PipeToCsv(ctx.ReportTables.Single(t => t.Id == tableId).Csv);
-                    default:
-                        return ctx.ReportTables.Single(t => t.Id == tableId).Csv;
-                }
+                case "html":
+                    return mohContext.ReportTables.Single(t => t.Id == tableId).Html;
+                case "xml":
+                    return mohContext.ReportTables.Single(t => t.Id == tableId).Xml;
+                case "csv":
+                    return PipeToCsv(mohContext.ReportTables.Single(t => t.Id == tableId).Csv);
+                default:
+                    return mohContext.ReportTables.Single(t => t.Id == tableId).Csv;
             }
         }
 
@@ -349,94 +337,89 @@ namespace Wellcome.MoH.Repository
             var topParam = new SqlParameter("@TopHits", SqlDbType.Int) { Value = hitCount };
             sqlParams.Add(topParam);
 
-            using (var ctx = new MoHContext())
+            try
             {
-                ((IObjectContextAdapter)ctx).ObjectContext.CommandTimeout = 60;
-                logger.LogInformation("Context ready, will search...");
-                try
+                var rows = mohContext.Database
+                    .MapRawSql<SqlSearchRow>(sqlString, sqlParams, dr => new SqlSearchRow(dr), 60)
+                    //.Skip((page - 1)*pageSize)
+                    //.Take(pageSize);
+                    .ToList();
+                logger.LogInformation("SQL Server returned {0} rows", rows.Count);
+                var result = new ReportsResult
                 {
-                    var rows = ctx.Database
-                        .SqlQuery<SqlSearchRow>(sqlString, sqlParams.Cast<object>().ToArray())
-                        //.Skip((page - 1)*pageSize)
-                        //.Take(pageSize);
-                        .ToList();
-                    logger.LogInformation("SQL Server returned {0} rows", rows.Count);
-                    var result = new ReportsResult
+                    TotalResults = rows.Count,
+                    TotalReports = rows.Select(r => r.ShortB).Distinct().Count()
+                };
+                if (useSpecialGroupingBehaviour)
+                {
+                    // this means that only VISIBLE results count towards paging totals. 
+                    // Results that the user has to expand don't count.
+                    // This means that the results per page can exceed pageCount significantly.
+                    int currentPage = 1;
+                    int visibleHitsOnPage = 0;
+                    int currentReportBNumber = -1;
+                    int hitsForCurrentReport = 0;
+                    var hitsForResultPage = new List<SqlSearchRow>();
+                    foreach (var hit in rows.GroupBy(r => r.ShortB).SelectMany(g => g))
                     {
-                        TotalResults = rows.Count,
-                        TotalReports = rows.Select(r => r.ShortB).Distinct().Count()
-                    };
-                    if (useSpecialGroupingBehaviour)
-                    {
-                        // this means that only VISIBLE results count towards paging totals. 
-                        // Results that the user has to expand don't count.
-                        // This means that the results per page can exceed pageCount significantly.
-                        int currentPage = 1;
-                        int visibleHitsOnPage = 0;
-                        int currentReportBNumber = -1;
-                        int hitsForCurrentReport = 0;
-                        var hitsForResultPage = new List<SqlSearchRow>();
-                        foreach (var hit in rows.GroupBy(r => r.ShortB).SelectMany(g => g))
+                        if (hit.ShortB != currentReportBNumber)
                         {
-                            if (hit.ShortB != currentReportBNumber)
+                            if (hitsForCurrentReport <= visibleHitsPerReport + expandoThreshold)
                             {
-                                if (hitsForCurrentReport <= visibleHitsPerReport + expandoThreshold)
+                                int numberOfHiddenHits = hitsForCurrentReport - visibleHitsPerReport;
+                                if (numberOfHiddenHits > 0 && numberOfHiddenHits <= expandoThreshold)
                                 {
-                                    int numberOfHiddenHits = hitsForCurrentReport - visibleHitsPerReport;
-                                    if (numberOfHiddenHits > 0 && numberOfHiddenHits <= expandoThreshold)
-                                    {
-                                        visibleHitsOnPage += numberOfHiddenHits;
-                                        result.TotalVisibleResults += numberOfHiddenHits;
-                                    }
+                                    visibleHitsOnPage += numberOfHiddenHits;
+                                    result.TotalVisibleResults += numberOfHiddenHits;
                                 }
-                                currentReportBNumber = hit.ShortB;
-                                hitsForCurrentReport = 0;
                             }
-                            if (visibleHitsOnPage >= pageSize && hitsForCurrentReport == 0)
-                            {
-                                currentPage++;
-                                visibleHitsOnPage = 0;
-                            }
-                            if (currentPage > page)
-                            {
-                                // break; - no, we need to know how many pages there are
-                            }
-
-                            hitsForCurrentReport++;
-                            if (hitsForCurrentReport <= visibleHitsPerReport)
-                            {
-                                visibleHitsOnPage++;
-                                result.TotalVisibleResults++;
-                            }
-
-                            if (currentPage == page)
-                            {
-                                hitsForResultPage.Add(hit);
-                            }
+                            currentReportBNumber = hit.ShortB;
+                            hitsForCurrentReport = 0;
                         }
-                        if (hitsForCurrentReport <= visibleHitsPerReport + expandoThreshold)
+                        if (visibleHitsOnPage >= pageSize && hitsForCurrentReport == 0)
                         {
-                            int numberOfHiddenHits = hitsForCurrentReport - visibleHitsPerReport;
-                            if (numberOfHiddenHits > 0 && numberOfHiddenHits <= expandoThreshold)
-                            {
-                                result.TotalVisibleResults++;
-                            }
+                            currentPage++;
+                            visibleHitsOnPage = 0;
                         }
-                        result.PageOfReports = ConvertToReports(hitsForResultPage, terms);
+                        if (currentPage > page)
+                        {
+                            // break; - no, we need to know how many pages there are
+                        }
+
+                        hitsForCurrentReport++;
+                        if (hitsForCurrentReport <= visibleHitsPerReport)
+                        {
+                            visibleHitsOnPage++;
+                            result.TotalVisibleResults++;
+                        }
+
+                        if (currentPage == page)
+                        {
+                            hitsForResultPage.Add(hit);
+                        }
                     }
-                    else
+                    if (hitsForCurrentReport <= visibleHitsPerReport + expandoThreshold)
                     {
-                        result.PageOfReports = ConvertToReports(rows.Skip((page - 1)*pageSize).Take(pageSize), terms);
-                        result.TotalVisibleResults = result.TotalResults;
+                        int numberOfHiddenHits = hitsForCurrentReport - visibleHitsPerReport;
+                        if (numberOfHiddenHits > 0 && numberOfHiddenHits <= expandoThreshold)
+                        {
+                            result.TotalVisibleResults++;
+                        }
                     }
-                    logger.LogInformation("Page of results converted to ReportsResult object");
-                    return result;
+                    result.PageOfReports = ConvertToReports(hitsForResultPage, terms);
                 }
-                catch (Exception ex)
+                else
                 {
-                    logger.LogError(ex, "Could not conduct free text search");    
-                    throw;
+                    result.PageOfReports = ConvertToReports(rows.Skip((page - 1)*pageSize).Take(pageSize), terms);
+                    result.TotalVisibleResults = result.TotalResults;
                 }
+                logger.LogInformation("Page of results converted to ReportsResult object");
+                return result;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Could not conduct free text search");    
+                throw;
             }
         }
 
@@ -611,6 +594,7 @@ from
             return String.Format("{0}-{1}.All_Tables.{2}.zip", startYear, endYear, format);
         }
 
+        
         public void WriteZipFile(string bNumber, string format, Stream stream)
         {
             MoHReport report;
@@ -621,10 +605,10 @@ from
             }
             if (report != null)
             {
-                using (var zip = new ZipFile())
+                using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, false))
                 {
                     AddReportToZip(report, format, false, zip);
-                    zip.Save(stream);
+                    //zip.Save(stream);
                 }
             }
         }
@@ -659,22 +643,22 @@ from
                 throw new NotSupportedException("Attempt to create a dynamic zip with " + fReports.Count 
                     + " reports, maximum allowed is " + maxAllowed + ".");
             }
-
-            using (var zip = new ZipFile())
+            
+            using (var zip = new ZipArchive(stream))
             {
                 foreach (var report in fReports)
                 {
-                    if (report.NormalisedMoHPlace.HasText())
+                    if (!String.IsNullOrWhiteSpace(report.NormalisedMoHPlace))
                     {
                         AddReportToZip(report, format, true, zip);
                     }
                 }
-                zip.Save(stream);
+                // zip.Save(stream);
             }
             //return name;
         }
 
-        private void AddReportToZip(MoHReport report, string format, bool createFolder, ZipFile zip)
+        private void AddReportToZip(MoHReport report, string format, bool createFolder, ZipArchive zip)
         {
             format = format.ToLowerInvariant();
             var entryFolder = (createFolder ? GetReportZipName(report, format) + "/" : "");
@@ -684,33 +668,53 @@ from
                 foreach (var table in tables)
                 {
                     var entryPath = String.Format("{0}{1}.{2}", entryFolder, table.Id, format);
+                    var entry = zip.CreateEntry(entryPath);
+                    string content;
                     switch (format)
                     {
                         case "html":
-                            zip.AddEntry(entryPath, table.Html);
+                            content = table.Html;
                             break;
                         case "xml":
-                            zip.AddEntry(entryPath, table.Xml);
+                            content = table.Xml;
                             break;
                         case "csv":
-                            zip.AddEntry(entryPath, PipeToCsv(table.Csv));
+                            content = PipeToCsv(table.Csv);
                             break;
                         default:
-                            zip.AddEntry(entryPath, table.Csv);
+                            content = table.Csv;
                             break;
                     }
+                    using var writer = new StreamWriter(entry.Open());
+                    writer.Write(content);
                 }
             }
             try
             {
                 // now add the full text, created from the harvest
                 // TODO - some duplication of Harvester2 Program here
-                const string fulltextDir = @"\\wellcomeit.com\Shares\LIB_WDL_DDS\MOH_ZIP_WORKING_SPACE\Full text";
                 var fullTextFileName = GetReportZipName(report, "txt"); // what the Harvester Program saves the full text as
                 var fullTextEntryPath = entryFolder + GetReportZipName(report, "fulltext.txt"); // what we want it called in the zip
-                //zip.AddFile(Path.Combine(fulltextDir, fullTextFileName)); //, fullTextEntryPath);
-                zip.AddEntry(fullTextEntryPath, File.ReadAllText(Path.Combine(fulltextDir, fullTextFileName)));
-
+                
+                var getObjectRequest = new GetObjectRequest
+                {
+                    BucketName = "wellcomecollection-moh-text",
+                    Key = fullTextFileName
+                };
+                try
+                {
+                    // get rid of the await... put back in later
+                    var getResponse = amazonS3.GetObjectAsync(getObjectRequest).Result;
+                    var textEntry = zip.CreateEntry(fullTextEntryPath);
+                
+                    using var writer = new StreamWriter(textEntry.Open());
+                    writer.Write(getResponse.ResponseStream);
+                }
+                catch (AmazonS3Exception e)
+                {
+                    logger.LogWarning(e, "Could not copy S3 Stream for {S3ObjectRequest}; {StatusCode}",
+                        getObjectRequest, e.StatusCode);
+                }
             }
             catch
             {
@@ -737,6 +741,61 @@ from
 
     class SqlSearchRow
     {
+        public SqlSearchRow(DbDataReader dr)
+        {
+            // Yes, use dapper, but only this mapper is needed.
+            
+            if (!dr.IsDBNull("HitType"))
+            {
+                HitType = dr.GetString("HitType");
+            }
+
+            if (!dr.IsDBNull("ShortB"))
+            {
+                ShortB = dr.GetInt32("ShortB");
+            }
+            
+            if (!dr.IsDBNull("Marc110aPlace"))
+            {
+                Marc110aPlace = dr.GetString("Marc110aPlace");
+            }
+            
+            if (!dr.IsDBNull("NormalisedMoHPlace"))
+            {
+                NormalisedMoHPlace = dr.GetString("NormalisedMoHPlace");
+            }
+            
+            if (!dr.IsDBNull("Year"))
+            {
+                Year = dr.GetInt32("Year");
+            }
+            
+            if (!dr.IsDBNull("ImageIndex"))
+            {
+                ImageIndex = dr.GetInt32("ImageIndex");
+            }
+            
+            if (!dr.IsDBNull("OrderLabel"))
+            {
+                OrderLabel = dr.GetString("OrderLabel");
+            }
+            
+            if (!dr.IsDBNull("HitText"))
+            {
+                HitText = dr.GetString("HitText");
+            }
+            
+            if (!dr.IsDBNull("Html"))
+            {
+                Html = dr.GetString("Html");
+            }
+            
+            if (!dr.IsDBNull("RvRank"))
+            {
+                RvRank = dr.GetInt32("RvRank");
+            }
+        }
+
         public string HitType { get; set; }
         public int ShortB { get; set; }
         public string Marc110aPlace { get; set; }
