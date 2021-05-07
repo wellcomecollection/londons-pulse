@@ -47,6 +47,7 @@ resource "aws_db_instance" "mssql" {
   auto_minor_version_upgrade = false
   publicly_accessible        = false
   ca_cert_identifier         = "rds-ca-2019"
+  license_model              = "license-included"
 
   vpc_security_group_ids = [
     aws_security_group.moh.id,
