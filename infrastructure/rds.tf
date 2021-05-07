@@ -48,6 +48,7 @@ resource "aws_db_instance" "mssql" {
   publicly_accessible        = false
   ca_cert_identifier         = "rds-ca-2019"
   license_model              = "license-included"
+  option_group_name          = aws_db_option_group.mssql_backup_restore.id
 
   vpc_security_group_ids = [
     aws_security_group.moh.id,
@@ -57,4 +58,72 @@ resource "aws_db_instance" "mssql" {
   db_subnet_group_name = aws_db_subnet_group.db.name
 
   tags = local.common_tags
+}
+
+# allow native backup/restore
+data "aws_iam_policy_document" "assume_role_policy_rds" {
+  statement {
+    actions = [
+      "sts:AssumeRole",
+    ]
+
+    principals {
+      type        = "Service"
+      identifiers = ["rds.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "moh_rds_role" {
+  name               = "moh-rds"
+  assume_role_policy = data.aws_iam_policy_document.assume_role_policy_rds.json
+}
+
+data "aws_iam_policy_document" "moh_rds_abilities" {
+  statement {
+    actions = [
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+    ]
+
+    resources = ["arn:aws:s3:::moh-temporary"]
+  }
+
+  statement {
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListMultipartUploadParts",
+      "s3:AbortMultipartUpload"
+    ]
+
+    resources = ["arn:aws:s3:::moh-temporary/*"]
+  }
+}
+
+resource "aws_iam_policy" "moh_rds_abilities" {
+  name        = "moh-rds-abilities"
+  description = "MoH RDS abilities"
+  policy      = data.aws_iam_policy_document.moh_rds_abilities.json
+}
+
+resource "aws_iam_role_policy_attachment" "moh_rds_abilities" {
+  role       = aws_iam_role.moh_rds_role.name
+  policy_arn = aws_iam_policy.moh_rds_abilities.arn
+}
+
+resource "aws_db_option_group" "mssql_backup_restore" {
+  name                     = "sqlserver-se-15-00-backup-restore"
+  option_group_description = "MSSQL Option Group with Native BackupRestore"
+  engine_name              = "sqlserver-se"
+  major_engine_version     = "15.00"
+
+  option {
+    option_name = "SQLSERVER_BACKUP_RESTORE"
+
+    option_settings {
+      name  = "IAM_ROLE_ARN"
+      value = aws_iam_role.moh_rds_role.arn
+    }
+  }
 }
