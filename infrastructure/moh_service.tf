@@ -30,7 +30,7 @@ module "log_router_permissions" {
 # Create container definitions
 module "moh_container_definition" {
   source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/container_definition?ref=v2.6.3"
-  name   = "moh"
+  name   = "moh-web"
 
   image = "${aws_ecr_repository.moh.repository_url}:production"
   port_mappings = [{
@@ -63,7 +63,7 @@ module "moh_task_definition" {
   ]
 
   launch_types = ["FARGATE"]
-  task_name    = "moh"
+  task_name    = "moh-web"
 }
 
 # secrets
@@ -78,7 +78,7 @@ module "service" {
   source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/service?ref=v2.6.3"
 
   cluster_arn  = aws_ecs_cluster.moh.arn
-  service_name = "moh"
+  service_name = "moh-web"
 
   task_definition_arn = module.moh_task_definition.arn
 
@@ -87,11 +87,17 @@ module "service" {
 
   target_group_arn = aws_alb_target_group.service.arn
   container_port   = 80
-  container_name   = "moh"
+  container_name   = "moh-web"
+}
+
+resource "aws_iam_role_policy" "moh_read_moh_text_bucket" {
+  name   = "moh-read-moh_text-bucket"
+  role   = module.moh_task_definition.task_role_name
+  policy = data.aws_iam_policy_document.moh_text_read.json
 }
 
 resource "aws_alb_target_group" "service" {
-  name        = "moh"
+  name        = "moh-web"
   target_type = "ip"
   protocol    = "HTTP"
 
