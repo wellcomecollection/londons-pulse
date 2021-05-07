@@ -10,6 +10,12 @@ namespace Wellcome.MoH.Repository.SqlServer
         public DbSet<ReportTable> ReportTables { get; set; }
         public DbSet<ReportParseError> ReportParseErrors { get; set; }
         public DbSet<PlaceMapping> PlaceMappings { get; set; }
+
+        public MoHContext(DbContextOptions<MoHContext> options) : base(options)
+        { }
+
+        public MoHContext()
+        { }
         
         // Not used in public facing MOH site
         // public DbSet<GazetteerPlace> GazetteerPlaces { get; set; }

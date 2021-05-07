@@ -361,6 +361,8 @@ ConnectedService.json
 
 .env
 
+appsettings.Development.json
+
 # Local .terraform directories
 **/.terraform/*
 
