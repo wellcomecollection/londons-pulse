@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wellcome.MoH.Api;
 using Wellcome.MoH.Repository;
+using Wellcome.MoH.Repository.SqlServer;
 
 namespace Wellcome.MoH.Web
 {
@@ -31,6 +34,16 @@ namespace Wellcome.MoH.Web
             {
                 builder.AddRazorRuntimeCompilation();
             }
+
+            services.AddHealthChecks().AddDbContextCheck<MoHContext>();
+            
+            new SqlConnection(Configuration.GetConnectionString("Moh")).Open();
+            
+            services.AddDbContext<MoHContext>(opts =>
+            {
+                opts.UseSqlServer(Configuration.GetConnectionString("Moh"));
+            });
+
             // TODO - use the straight-to-DB version
             services.AddSingleton<IServiceApi, JsonConsumer>();
         }
@@ -73,6 +86,7 @@ namespace Wellcome.MoH.Web
                     name: "default",
                     pattern: "moh/{action=Index}/{id?}/{page?}",
                     defaults: new {controller = "Home" });
+                endpoints.MapHealthChecks("/management/healthcheck");
             });
         }
     }
