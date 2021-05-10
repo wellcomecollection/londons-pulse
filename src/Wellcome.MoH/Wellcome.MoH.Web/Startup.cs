@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Amazon.S3;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,15 +38,17 @@ namespace Wellcome.MoH.Web
 
             services.AddHealthChecks().AddDbContextCheck<MoHContext>();
             
-            new SqlConnection(Configuration.GetConnectionString("Moh")).Open();
+            // new SqlConnection(Configuration.GetConnectionString("Moh")).Open();
             
             services.AddDbContext<MoHContext>(opts =>
             {
                 opts.UseSqlServer(Configuration.GetConnectionString("Moh"));
             });
 
-            // TODO - use the straight-to-DB version
-            services.AddSingleton<IServiceApi, JsonConsumer>();
+            
+            services.AddDefaultAWSOptions(Configuration.GetAWSOptions());
+            services.AddAWSService<IAmazonS3>();
+            services.AddScoped<IServiceApi, MoHService>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -70,6 +73,7 @@ namespace Wellcome.MoH.Web
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapControllerRoute(
                     name: "about",
                     pattern: "moh/about-the-reports/{*detail}",
