@@ -114,6 +114,10 @@ namespace Wellcome.MoH.Api.Library
             // https://github.com/kanisimoff/PluralizeService.Core
             if (_stemmer == null) _stemmer = new EnglishStemmer();
             var stemmed = _stemmer.Stem(s.TrimNonAlphaNumeric());
+            if (string.IsNullOrWhiteSpace(stemmed))
+            {
+                return stemmed;
+            }
             if (PluralizationProvider.IsPlural(stemmed))
                 stemmed = PluralizationProvider.Singularize(stemmed);
             return stemmed;

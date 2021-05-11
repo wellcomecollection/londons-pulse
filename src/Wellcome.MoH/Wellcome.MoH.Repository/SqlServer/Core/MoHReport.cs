@@ -22,7 +22,9 @@ namespace Wellcome.MoH.Repository.SqlServer.Core
         int? PageCount { get; set; }
         int? TableCount { get; set; }
         string Author { get; set; }
-        ICollection<PlaceMapping> PlaceMappings { get; set; }
+        // ICollection<PlaceMapping> PlaceMappings { get; set; }
+        ICollection<MoHReportPlaceMapping> MoHReportPlaceMappings { get; set; }
+        
         Guid? CoverImageId { get; set; }
 // ReSharper disable InconsistentNaming
         string Marc110aPlace { get; set; }
@@ -54,7 +56,9 @@ namespace Wellcome.MoH.Repository.SqlServer.Core
         public int? PageCount { get; set; }
         public int? TableCount { get; set; }
         public string Author { get; set; }
-        public virtual ICollection<PlaceMapping> PlaceMappings { get; set; }
+        // public virtual ICollection<PlaceMapping> PlaceMappings { get; set; }
+        
+        public ICollection<MoHReportPlaceMapping> MoHReportPlaceMappings { get; set; }
         public Guid? CoverImageId { get; set; }
         public string Marc110aPlace { get; set; }
         public string HarvestFolder { get; set; }

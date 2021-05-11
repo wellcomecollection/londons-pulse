@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -10,6 +9,7 @@ using System.Text;
 using System.Xml.Linq;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Logging;
 using Wellcome.MoH.Api;
 using Wellcome.MoH.Api.Library;
@@ -108,7 +108,8 @@ namespace Wellcome.MoH.Repository
             bool preCanned = false;
             if (!string.IsNullOrWhiteSpace(anyPlace))
             {
-                reports = reports.Where(r => r.PlaceMappings.Any(pm => pm.NormalisedMoHPlace == anyPlace));
+                reports = reports.Where(r => r.MoHReportPlaceMappings.Any(
+                    pm => pm.PlaceMapping.NormalisedMoHPlace == anyPlace));
             }
             else if (IsKnownDateRange(startYear, endYear))
             {
@@ -131,11 +132,14 @@ namespace Wellcome.MoH.Repository
                     ordered = reports.OrderBy(r => r.Year);
                     break;
             }
-            var paged = ordered.Skip((page - 1)*pageSize).Take(pageSize);
+
+            var freeze = ordered.ToList();
+            int total = freeze.Count;
+            var paged = freeze.Select(e => e).Skip((page - 1)*pageSize).Take(pageSize);
             // http://stackoverflow.com/questions/7767409/better-way-to-query-a-page-of-data-and-get-total-count-in-entity-framework-4-1
-            var thisPage = paged.GroupBy (p => new { Total = reports.Count() }).First();
-            var apiReports = thisPage.Select(GetBrowseReport);
-            return new ReportsResult {PageOfReports = apiReports.ToArray(), TotalResults = thisPage.Key.Total};
+            //var thisPage = paged.GroupBy (p => new { Total = total }).First(); 
+            var apiReports = paged.Select(GetBrowseReport);
+            return new ReportsResult {PageOfReports = apiReports.ToArray(), TotalResults = total};
         }
 
         private string FormatThumbnail(string bNumber)
@@ -574,11 +578,8 @@ from
         public string GetZipFileName(string bNumber, string format)
         {
             int shortB = bNumber.ToShortBNumber();
-            using (var ctx = new MoHContext())
-            {
-                var report = ctx.MoHReports.SingleOrDefault(r => r.ShortBNumber == shortB);
-                return GetReportZipName(report, format) + ".zip";
-            }
+            var report = mohContext.MoHReports.SingleOrDefault(r => r.ShortBNumber == shortB);
+            return GetReportZipName(report, format) + ".zip";
         }
 
         public string GetZipFileName(string place, bool useNormalisedPlace, int startYear, int endYear, string format)
@@ -617,26 +618,26 @@ from
         {
             //string name;
             List<MoHReport> fReports;
-            using (var ctx = new MoHContext())
+
+            IQueryable<MoHReport> reports;
+            if (useNormalisedPlace)
             {
-                IQueryable<MoHReport> reports;
-                if (useNormalisedPlace)
-                {
-                    reports = ctx.MoHReports.Where(r => r.NormalisedPlace == place);
-                    //name = String.Format("{0}.All_Tables.{1}.zip", place.ToAlphanumericOrUnderscore(), format);
-                }
-                else if (!string.IsNullOrWhiteSpace(place))
-                {
-                    reports = ctx.MoHReports.Where(r => r.PlaceMappings.Any(pm => pm.NormalisedMoHPlace == place));
-                    //name = String.Format("{0}-{1}.{2}.{3}.zip", startYear, endYear, place, format);
-                }
-                else
-                {
-                    reports = ctx.MoHReports;
-                    //name = String.Format("{0}-{1}.All_Tables.{2}.zip", startYear, endYear, format);
-                }
-                fReports = reports.Where(r => r.Year >= startYear && r.Year <= endYear).ToList();
+                reports = mohContext.MoHReports.Where(r => r.NormalisedPlace == place);
+                //name = String.Format("{0}.All_Tables.{1}.zip", place.ToAlphanumericOrUnderscore(), format);
             }
+            else if (!string.IsNullOrWhiteSpace(place))
+            {
+                reports = mohContext.MoHReports.Where(r => r.MoHReportPlaceMappings.Any(
+                    pm => pm.PlaceMapping.NormalisedMoHPlace == place));
+                //name = String.Format("{0}-{1}.{2}.{3}.zip", startYear, endYear, place, format);
+            }
+            else
+            {
+                reports = mohContext.MoHReports;
+                //name = String.Format("{0}-{1}.All_Tables.{2}.zip", startYear, endYear, format);
+            }
+            fReports = reports.Where(r => r.Year >= startYear && r.Year <= endYear).ToList();
+            
             const int maxAllowed = 100;
             if (fReports.Count > maxAllowed)
             {

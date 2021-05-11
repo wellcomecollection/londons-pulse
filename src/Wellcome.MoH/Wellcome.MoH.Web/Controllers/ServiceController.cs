@@ -1,5 +1,4 @@
 using System.IO;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Wellcome.MoH.Api;
@@ -7,7 +6,7 @@ using Wellcome.MoH.Api.Library;
 
 namespace Wellcome.MoH.Web.Controllers
 {    
-    [Route("[controller]")]
+    [Route("moh/[controller]")]
     [ApiController]
     public class ServiceController : ControllerBase
     {
@@ -25,6 +24,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <summary>
         /// THE browse list of the Moh homepage, typically a list of moder London Boroughs
         /// </summary>
+        [Route("normalisednames")]
         public IActionResult NormalisedNames()
         {
             return Ok(mohService.GetNormalisedNames());
@@ -33,6 +33,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <summary>
         /// All the placenames available, derived from MARC
         /// </summary>
+        [Route("allplacenames")]
         public IActionResult AllPlaceNames()
         {
             return Ok(mohService.GetAllPlaceNames());
@@ -41,6 +42,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <summary>
         /// All the placenames available, derived from MARC, after some data cleansing
         /// </summary>
+        [Route("normalisedmohplacenames")]
         public IActionResult NormalisedMoHPlaceNames()
         {
             return Ok(mohService.GetNormalisedMoHPlaceNames());
@@ -51,6 +53,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// </summary>
         /// <param name="fragment"></param>
         /// <returns></returns>
+        [Route("autocompleteplace")]
         public IActionResult AutoCompletePlace(string fragment)
         {
             return Ok(mohService.AutoCompletePlace(fragment));
@@ -67,6 +70,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <param name="pageSize"></param>
         /// <param name="ordering"></param>
         /// <returns></returns>
+        [Route("browsenormalised")]
         public IActionResult BrowseNormalised(
             string normalisedPlace = null, 
             int startYear = 1848, int endYear = 2020, 
@@ -86,6 +90,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <param name="pageSize"></param>
         /// <param name="ordering"></param>
         /// <returns></returns>
+        [Route("browseanyplace")]
         public IActionResult BrowseAnyPlace(
             string place = null,
             int startYear = 1848, int endYear = 2020,
@@ -100,6 +105,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// </summary>
         /// <param name="bNumber"></param>
         /// <returns></returns>
+        [Route("report/{bNumber}")]
         public IActionResult Report(string bNumber)
         {
             return Ok(mohService.GetReportWithAllTableSummaries(bNumber));
@@ -111,6 +117,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <param name="bNumber"></param>
         /// <param name="imageIndex"></param>
         /// <returns></returns>
+        [Route("page/{bNumber}/{imageIndex}")]
         public IActionResult Page(string bNumber, int imageIndex)
         {
             return Ok(mohService.GetPage(bNumber, imageIndex));
@@ -131,6 +138,7 @@ namespace Wellcome.MoH.Web.Controllers
         /// <param name="visibleHitsPerReport"></param>
         /// <param name="expandoThreshold"></param>
         /// <returns></returns>
+        [Route("search")]
         public IActionResult Search(
             string terms,
             string constrainedPlaceName = null,
@@ -146,6 +154,7 @@ namespace Wellcome.MoH.Web.Controllers
                 visibleHitsPerReport, expandoThreshold));
         }
         
+        [Route("tables/{tableId}.{fileExt}")]
         public ContentResult Tables(long tableId, string fileExt)
         {
             string c = mohService.GetTableText(tableId, fileExt);
@@ -173,6 +182,7 @@ namespace Wellcome.MoH.Web.Controllers
         }
         
         
+        [Route("zip")]
         public IActionResult Zip(string op, string format, int startYear = 0, int endYear = 2020,
                               bool useNormalisedPlace = false)
         {

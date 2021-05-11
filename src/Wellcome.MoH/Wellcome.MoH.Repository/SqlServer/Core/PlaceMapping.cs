@@ -11,11 +11,13 @@ namespace Wellcome.MoH.Repository.SqlServer.Core
         public int? GazetteerPlace { get; set; }
         public string MatchType { get; set; }
 
-        // addtional
+        // additional
         public string NormalisedMoHPlace { get; set; }
         public int MarcSource { get; set; } // 0 for Planman, 110 or 651 for MARC
         public string NormalisedPlace { get; set; } // should we put these in to a separate table? no
         public string SecondaryNormalisedPlace { get; set; }
-        public virtual ICollection<MoHReport> MoHReports { get; set; } 
+        // public virtual ICollection<MoHReport> MoHReports { get; set; } 
+        
+        public ICollection<MoHReportPlaceMapping> MoHReportPlaceMappings { get; set; }
     }
 }

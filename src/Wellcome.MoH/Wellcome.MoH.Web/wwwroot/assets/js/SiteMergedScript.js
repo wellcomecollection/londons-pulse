@@ -3572,11 +3572,11 @@ $(document).ready(function () {
         elEv.category = "Links";
         elEv.label = href.replace(/ /g, "-");
         elEv.loc = document.baseHref + href;
-        if (href.indexOf('service/moh/zip') != -1) {
+        if (href.indexOf('moh/service/zip') != -1) {
             elEv.action = "Download MoH Zip";
             track = true;
         }
-        if (href.indexOf('service/moh/table') != -1) {
+        if (href.indexOf('moh/service/table') != -1) {
             elEv.action = "Download MoH Table";
             track = true;
         }
