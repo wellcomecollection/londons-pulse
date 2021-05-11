@@ -10,6 +10,7 @@ namespace Wellcome.MoH.Repository.SqlServer
         public DbSet<ReportTable> ReportTables { get; set; }
         public DbSet<ReportParseError> ReportParseErrors { get; set; }
         public DbSet<PlaceMapping> PlaceMappings { get; set; }
+        public DbSet<MoHReportPlaceMapping> MoHReportPlaceMappings { get; set; }
 
         public MoHContext(DbContextOptions<MoHContext> options) : base(options)
         { }
@@ -41,10 +42,31 @@ namespace Wellcome.MoH.Repository.SqlServer
                 // .Property(p => p.SEQ)
                 // .HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 
-                modelBuilder.Entity<MoHReport>()
-                    .HasMany(report => report.PlaceMappings)
-                    .WithMany(placeMapping => placeMapping.MoHReports)
-                    .UsingEntity(j => j.ToTable("MoHReportPlaceMapping"));
+                
+                modelBuilder.Entity<MoHReportPlaceMapping>(
+                    e =>
+                    {
+                        e.ToTable("MoHReportPlaceMapping");
+                        e.HasKey(x => new {x.ShortBNumber, x.PlaceMappingId});
+                    });
+                // modelBuilder.Entity<MoHReportPlaceMapping>()
+                //     .HasKey(x => new { x.ShortBNumber, x.PlaceMappingId });  
+                modelBuilder.Entity<MoHReportPlaceMapping>()
+                    .HasOne(x => x.MoHReport)
+                    .WithMany(x => x.MoHReportPlaceMappings)
+                    .HasForeignKey(x => x.ShortBNumber);  
+                modelBuilder.Entity<MoHReportPlaceMapping>()
+                    .HasOne(x => x.PlaceMapping)
+                    .WithMany(x => x.MoHReportPlaceMappings)
+                    .HasForeignKey(x => x.PlaceMappingId);
+                
+                
+
+                //
+                // modelBuilder.Entity<MoHReport>()
+                //     .HasMany(report => report.PlaceMappings)
+                //     .WithMany(placeMapping => placeMapping.MoHReports)
+                //     .UsingEntity(j => j.ToTable("MoHReportPlaceMapping"));
                 // see https://stackoverflow.com/questions/42337911/ef-core-many-to-many-configuration-not-working-with-fluent-api
                 
                 // .Map(m =>
@@ -53,6 +75,8 @@ namespace Wellcome.MoH.Repository.SqlServer
                 //     m.MapLeftKey("ShortBNumber");
                 //     m.MapRightKey("PlaceMappingId"); 
                 // });
+                
+                        
         }
     }
 }

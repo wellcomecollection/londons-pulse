@@ -38,11 +38,9 @@ namespace Wellcome.MoH.Web
 
             services.AddHealthChecks().AddDbContextCheck<MoHContext>();
             
-            // new SqlConnection(Configuration.GetConnectionString("Moh")).Open();
-            
             services.AddDbContext<MoHContext>(opts =>
             {
-                opts.UseSqlServer(Configuration.GetConnectionString("Moh"));
+                opts.UseSqlServer(Configuration.GetConnectionString("Moh")).EnableSensitiveDataLogging();
             });
 
             
