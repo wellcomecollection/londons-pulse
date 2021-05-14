@@ -21,6 +21,10 @@ namespace Wellcome.MoH.Web.Controllers
         
         public IActionResult Index()
         {
+            if (Request.Path == "/moh")
+            {
+                return Redirect("/moh/");
+            }
             return View(new SearchModel());
         }
 
@@ -83,7 +87,7 @@ namespace Wellcome.MoH.Web.Controllers
                 model.Page, model.PageSize, 
                 model.Ordering);
 
-            ViewData["ZipRoot"] = $"/zip?op={normalisedPlace}&useNormalisedPlace=true";
+            ViewData["ZipRoot"] = $"/moh/service/zip?op={normalisedPlace}&useNormalisedPlace=true";
             return BrowseView(model);
         }
         
@@ -97,7 +101,9 @@ namespace Wellcome.MoH.Web.Controllers
                 model.Page, model.PageSize, 
                 model.Ordering);
 
-            ViewData["ZipRoot"] = $"/zip?op={model.Place}&startYear={model.StartYear}&endYear={model.EndYear}";
+            var op = model.Place;
+            if (string.IsNullOrWhiteSpace(op)) op = "years";
+            ViewData["ZipRoot"] = $"/moh/service/zip?op={op}&startYear={model.StartYear}&endYear={model.EndYear}";
             return BrowseView(model);
         }
         
@@ -138,7 +144,7 @@ namespace Wellcome.MoH.Web.Controllers
             ViewData["Manifest"] = $"{Constants.Manifest}{id}";
             ViewData["CanvasIndex"] = 0;
             ViewData["UVCssClass"] = "player";
-            ViewData["ZipRoot"] = $"/zip?op={id}";
+            ViewData["ZipRoot"] = $"/moh/service/zip?op={id}";
             return View(report);
         }
         

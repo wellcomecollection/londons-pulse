@@ -600,13 +600,10 @@ from
         {
             MoHReport report;
             int shortB = bNumber.ToShortBNumber();
-            using (var ctx = new MoHContext())
-            {
-                report = ctx.MoHReports.SingleOrDefault(r => r.ShortBNumber == shortB);
-            }
+            report = mohContext.MoHReports.SingleOrDefault(r => r.ShortBNumber == shortB);
             if (report != null)
             {
-                using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, false))
+                using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, true))
                 {
                     AddReportToZip(report, format, false, zip);
                     //zip.Save(stream);
@@ -645,7 +642,7 @@ from
                     + " reports, maximum allowed is " + maxAllowed + ".");
             }
             
-            using (var zip = new ZipArchive(stream))
+            using (var zip = new ZipArchive(stream, ZipArchiveMode.Create, true))
             {
                 foreach (var report in fReports)
                 {
@@ -654,41 +651,36 @@ from
                         AddReportToZip(report, format, true, zip);
                     }
                 }
-                // zip.Save(stream);
             }
-            //return name;
         }
 
         private void AddReportToZip(MoHReport report, string format, bool createFolder, ZipArchive zip)
         {
             format = format.ToLowerInvariant();
             var entryFolder = (createFolder ? GetReportZipName(report, format) + "/" : "");
-            using (var ctx = new MoHContext())
+            var tables = mohContext.ReportTables.Where(t => t.ShortBNumber == report.ShortBNumber);
+            foreach (var table in tables)
             {
-                var tables = ctx.ReportTables.Where(t => t.ShortBNumber == report.ShortBNumber);
-                foreach (var table in tables)
+                var entryPath = String.Format("{0}{1}.{2}", entryFolder, table.Id, format);
+                var entry = zip.CreateEntry(entryPath);
+                string content;
+                switch (format)
                 {
-                    var entryPath = String.Format("{0}{1}.{2}", entryFolder, table.Id, format);
-                    var entry = zip.CreateEntry(entryPath);
-                    string content;
-                    switch (format)
-                    {
-                        case "html":
-                            content = table.Html;
-                            break;
-                        case "xml":
-                            content = table.Xml;
-                            break;
-                        case "csv":
-                            content = PipeToCsv(table.Csv);
-                            break;
-                        default:
-                            content = table.Csv;
-                            break;
-                    }
-                    using var writer = new StreamWriter(entry.Open());
-                    writer.Write(content);
+                    case "html":
+                        content = table.Html;
+                        break;
+                    case "xml":
+                        content = table.Xml;
+                        break;
+                    case "csv":
+                        content = PipeToCsv(table.Csv);
+                        break;
+                    default:
+                        content = table.Csv;
+                        break;
                 }
+                using var writer = new StreamWriter(entry.Open());
+                writer.Write(content);
             }
             try
             {
@@ -700,16 +692,15 @@ from
                 var getObjectRequest = new GetObjectRequest
                 {
                     BucketName = "wellcomecollection-moh-text",
-                    Key = fullTextFileName
+                    Key = $"Fulltext/{fullTextFileName}"
                 };
                 try
                 {
                     // get rid of the await... put back in later
                     var getResponse = amazonS3.GetObjectAsync(getObjectRequest).Result;
                     var textEntry = zip.CreateEntry(fullTextEntryPath);
-                
-                    using var writer = new StreamWriter(textEntry.Open());
-                    writer.Write(getResponse.ResponseStream);
+                    using var zipEntryStream = textEntry.Open();
+                    getResponse.ResponseStream.CopyTo(zipEntryStream);
                 }
                 catch (AmazonS3Exception e)
                 {

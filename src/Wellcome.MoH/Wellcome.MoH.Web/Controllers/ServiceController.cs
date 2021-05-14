@@ -209,24 +209,39 @@ namespace Wellcome.MoH.Web.Controllers
                 return Redirect(alternateFile);
             }
             
-            // we got here so it's not an existing file
-            // DotNetZip doesn't like writing very large files to a MemoryStream, so we will need to create
-            // a temp file
-            
-            var tempFile = Path.GetTempFileName();
-            using (var stream = new FileStream(tempFile, FileMode.Create))
+            // we got here so it's not an existing, pre-canned file
+            var memoryStream = new MemoryStream();
+            if (op.IsBNumber())
             {
-                if (op.IsBNumber())
-                {
-                    mohService.WriteZipFile(op, format, stream);
-                }
-                else
-                {
-                    if (op == "years") op = null;
-                    mohService.WriteZipFile(op, useNormalisedPlace, startYear, endYear, format, stream);
-                }
-                return File(tempFile, "application/zip", name);
+                mohService.WriteZipFile(op, format, memoryStream);
             }
+            else
+            {
+                if (op == "years") op = null;
+                mohService.WriteZipFile(op, useNormalisedPlace, startYear, endYear, format, memoryStream);
+            }
+
+            memoryStream.Position = 0;
+            return new FileStreamResult(memoryStream, "application/zip")
+            {
+                FileDownloadName = name
+            };
+
+            // var tempFile = Path.GetTempFileName();
+            // using (var stream = new FileStream(tempFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None, 4096, FileOptions.DeleteOnClose))
+            // {
+            //     if (op.IsBNumber())
+            //     {
+            //         mohService.WriteZipFile(op, format, stream);
+            //     }
+            //     else
+            //     {
+            //         if (op == "years") op = null;
+            //         mohService.WriteZipFile(op, useNormalisedPlace, startYear, endYear, format, stream);
+            //     }
+            //     return File(tempFile, "application/zip", name);
+            //     // TODO - delete this file once response ended.
+            // }
         }
     }
 }
