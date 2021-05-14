@@ -40,7 +40,7 @@ namespace Wellcome.MoH.Web
             
             services.AddDbContext<MoHContext>(opts =>
             {
-                opts.UseSqlServer(Configuration.GetConnectionString("Moh")).EnableSensitiveDataLogging();
+                opts.UseSqlServer(Configuration.GetConnectionString("Moh"));
             });
 
             
