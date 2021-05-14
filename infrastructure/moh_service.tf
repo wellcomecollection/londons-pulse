@@ -54,8 +54,8 @@ module "moh_container_definition" {
 module "moh_task_definition" {
   source = "git::https://github.com/wellcomecollection/terraform-aws-ecs-service.git//modules/task_definition?ref=v2.6.3"
 
-  cpu    = 512
-  memory = 1024
+  cpu    = 1024
+  memory = 4096
 
   container_definitions = [
     module.log_router_container.container_definition,
