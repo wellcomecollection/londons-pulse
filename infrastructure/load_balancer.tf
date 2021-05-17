@@ -11,23 +11,6 @@ resource "aws_alb" "this" {
   tags = local.common_tags
 }
 
-resource "aws_alb_target_group" "this" {
-  name                 = "moh"
-  port                 = 80
-  protocol             = "HTTP"
-  vpc_id               = local.vpc_id
-  deregistration_delay = 30
-
-  health_check {
-    path                = "/"
-    timeout             = 30
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    interval            = 60
-    matcher             = "200,404"
-  }
-}
-
 # redirect http -> https
 resource "aws_lb_listener" "http_redirect" {
   load_balancer_arn = aws_alb.this.id
@@ -59,7 +42,7 @@ resource "aws_lb_listener" "https" {
   certificate_arn = data.aws_acm_certificate.wc_digirati_io.arn
 
   default_action {
-    target_group_arn = aws_alb_target_group.this.id
+    target_group_arn = aws_alb_target_group.service.id
     type             = "forward"
   }
 }
