@@ -1,7 +1,6 @@
 resource "aws_db_subnet_group" "db" {
   name       = "moh-db"
   subnet_ids = data.terraform_remote_state.platform_infra.outputs.moh_vpc_private_subnets
-  tags       = local.common_tags
 }
 
 data "aws_subnet" "private_subnets" {
@@ -21,12 +20,9 @@ resource "aws_security_group" "moh_mssql_access" {
     cidr_blocks = [for s in data.aws_subnet.private_subnets : s.cidr_block]
   }
 
-  tags = merge(
-    local.common_tags,
-    {
-      Name = "moh-mssql-access",
-    }
-  )
+  tags = {
+    Name = "moh-mssql-access",
+  }
 }
 
 data "aws_secretsmanager_secret_version" "admin_creds" {
@@ -58,8 +54,6 @@ resource "aws_db_instance" "mssql" {
   ]
 
   db_subnet_group_name = aws_db_subnet_group.db.name
-
-  tags = local.common_tags
 }
 
 # allow native backup/restore

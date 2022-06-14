@@ -30,12 +30,9 @@ resource "aws_security_group" "ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(
-    local.common_tags,
-    {
-      Name = "moh-ssh-access",
-    }
-  )
+  tags = {
+    Name = "moh-ssh-access",
+  }
 }
 
 # Bastion - t2.micro amazon linux 2

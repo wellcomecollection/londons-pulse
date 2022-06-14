@@ -6,6 +6,12 @@ provider "aws" {
   region = local.region
 
   profile = "wcdev"
+  default_tags {
+    tags = {
+      Terraform = true
+      Project   = local.project
+    }
+  }
 }
 
 terraform {
