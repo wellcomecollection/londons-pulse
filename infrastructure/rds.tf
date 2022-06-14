@@ -23,7 +23,9 @@ resource "aws_security_group" "moh_mssql_access" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "moh-mssql-access")
+    {
+      Name = "moh-mssql-access",
+    }
   )
 }
 

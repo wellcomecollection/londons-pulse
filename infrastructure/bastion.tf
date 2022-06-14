@@ -32,7 +32,9 @@ resource "aws_security_group" "ssh" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "moh-ssh-access")
+    {
+      Name = "moh-ssh-access",
+    }
   )
 }
 

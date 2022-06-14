@@ -77,7 +77,9 @@ resource "aws_security_group" "web" {
 
   tags = merge(
     local.common_tags,
-    map("Name", "moh-external-lb")
+    {
+      Name = "moh-external-lb",
+    }
   )
 
   lifecycle {
