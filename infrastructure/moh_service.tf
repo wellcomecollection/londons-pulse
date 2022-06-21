@@ -6,13 +6,11 @@ locals {
 
 resource "aws_ecr_repository" "moh" {
   name = "moh"
-  tags = local.common_tags
 }
 
 # ECS Cluster
 resource "aws_ecs_cluster" "moh" {
   name = "moh"
-  tags = local.common_tags
 }
 
 # Logging container using fluentbit
@@ -46,8 +44,6 @@ module "moh_container_definition" {
   }
 
   log_configuration = module.log_router_container.container_log_configuration
-
-  tags = local.common_tags
 }
 
 # Create task definition

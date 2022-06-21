@@ -7,8 +7,6 @@ resource "aws_alb" "this" {
     aws_security_group.moh.id,
     aws_security_group.web.id,
   ]
-
-  tags = local.common_tags
 }
 
 # redirect http -> https
@@ -75,10 +73,9 @@ resource "aws_security_group" "web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(
-    local.common_tags,
-    map("Name", "moh-external-lb")
-  )
+  tags = {
+    Name = "moh-external-lb",
+  }
 
   lifecycle {
     create_before_destroy = true

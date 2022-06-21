@@ -1,10 +1,6 @@
-data "template_file" "public_key" {
-  template = file("files/key.pub")
-}
-
 resource "aws_key_pair" "this" {
   key_name   = "moh"
-  public_key = data.template_file.public_key.rendered
+  public_key = file("files/key.pub")
 
   lifecycle {
     create_before_destroy = true
@@ -30,10 +26,9 @@ resource "aws_security_group" "ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(
-    local.common_tags,
-    map("Name", "moh-ssh-access")
-  )
+  tags = {
+    Name = "moh-ssh-access",
+  }
 }
 
 # Bastion - t2.micro amazon linux 2
