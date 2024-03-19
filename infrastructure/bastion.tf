@@ -79,9 +79,18 @@ resource "aws_iam_instance_profile" "bastion" {
   role = aws_iam_role.bastion.name
 }
 
+data "aws_ami" "bastion_host_ami" {
+  most_recent = true
+  owners      = ["self"]
+  filter {
+    name   = "name"
+    values = ["weco-amzn2-hvm-x86_64*"]
+  }
+}
+
 resource "aws_launch_configuration" "bastion" {
   name_prefix          = "moh-bastion"
-  image_id             = "ami-063d4ab14480ac177"
+  image_id             = data.aws_ami.bastion_host_ami.id
   instance_type        = "t2.micro"
   iam_instance_profile = aws_iam_instance_profile.bastion.name
   key_name             = aws_key_pair.this.key_name

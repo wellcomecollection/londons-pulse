@@ -17,3 +17,13 @@ data "aws_iam_policy_document" "moh_text_read" {
     ]
   }
 }
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "moh_text" {
+  bucket = aws_s3_bucket.moh_text.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "AES256"
+    }
+  }
+}
