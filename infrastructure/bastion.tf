@@ -109,8 +109,8 @@ resource "aws_autoscaling_group" "bastion" {
   name                 = "moh-bastion"
   launch_configuration = aws_launch_configuration.bastion.name
 
-  max_size            = "1"
-  min_size            = "1"
+  max_size            = "0"
+  min_size            = "0"
   vpc_zone_identifier = data.terraform_remote_state.platform_infra.outputs.moh_vpc_public_subnets
 
   default_cooldown = 0
