@@ -74,6 +74,15 @@ resource "aws_iam_role_policy_attachment" "bastion_abilities" {
   policy_arn = aws_iam_policy.bastion_abilities.arn
 }
 
+data "aws_iam_policy" "ssm_managed" {
+  name = "AmazonSSMManagedInstanceCore"
+}
+
+resource "aws_iam_role_policy_attachment" "bastion_ssm" {
+  role       = aws_iam_role.bastion.name
+  policy_arn = data.aws_iam_policy.ssm_managed.arn
+}
+
 resource "aws_iam_instance_profile" "bastion" {
   name = "moh-bastion"
   role = aws_iam_role.bastion.name
@@ -109,8 +118,8 @@ resource "aws_autoscaling_group" "bastion" {
   name                 = "moh-bastion"
   launch_configuration = aws_launch_configuration.bastion.name
 
-  max_size            = "0"
-  min_size            = "0"
+  max_size            = 0
+  min_size            = 0
   vpc_zone_identifier = data.terraform_remote_state.platform_infra.outputs.moh_vpc_public_subnets
 
   default_cooldown = 0

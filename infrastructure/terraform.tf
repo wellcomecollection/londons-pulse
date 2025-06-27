@@ -1,9 +1,7 @@
 provider "aws" {
-  assume_role {
-    role_arn = "arn:aws:iam::653428163053:role/digirati-developer"
-  }
-
   region = local.region
+
+  profile = "wcdev"
 
   default_tags {
     tags = {
@@ -14,14 +12,14 @@ provider "aws" {
 }
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = ">= 1.8"
 
   backend "s3" {
     bucket = "dlcs-remote-state"
     key    = "moh/terraform.tfstate"
     region = "eu-west-1"
 
-    role_arn = "arn:aws:iam::653428163053:role/digirati-developer"
+    profile = "wcdev"
   }
 
   required_providers {
