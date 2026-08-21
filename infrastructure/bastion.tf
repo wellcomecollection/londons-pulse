@@ -16,7 +16,7 @@ resource "aws_security_group" "ssh" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = local.ip_whitelist
+    cidr_blocks = data.terraform_remote_state.dlcs.outputs.digirati_egress
   }
 
   egress {
